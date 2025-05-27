@@ -1,0 +1,3991 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volvo Group PBI HTML Measure designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Volvo+Novum:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Volvo Group Color Variables */
+        :root {
+            --volvo-blue: #003057;
+            --volvo-light-blue: #1c6bba;
+            --volvo-red: #e60013;
+            --volvo-gray: #7c7c7c;
+            --volvo-light-gray: #f2f3f5;
+            --volvo-dark-gray: #4f4f4f;
+
+            /* Theme variables */
+            --editor-bg: #ffffff;
+            --panel-bg: #f8f9fa;
+            --panel-border: #e6e8eb;
+            --accent-color: var(--volvo-blue);
+            --accent-secondary: var(--volvo-light-blue);
+            --accent-highlight: var(--volvo-red);
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --input-bg: #ffffff;
+            --input-border: #d1d5db;
+            --success-green: #22c55e;
+            --error-red: #ef4444;
+            --warning-yellow: #f59e0b;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Volvo Novum', 'Inter', sans-serif;
+            background: var(--editor-bg);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 320px 1fr 400px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--editor-bg);
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--volvo-blue);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* <- remplace gap */
+            width: 100%;
+            /* nécessaire pour que space-between fonctionne bien */
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--volvo-blue);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background: var(--volvo-light-blue);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+            border: 1px solid var(--input-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--volvo-light-gray);
+            border-color: var(--volvo-blue);
+        }
+
+        /* Left Panel - Card Selector */
+        .card-selector {
+            background: var(--panel-bg);
+            border-right: 1px solid var(--panel-border);
+            padding: 90px 20px 20px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--input-border) transparent;
+        }
+
+        .section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-item {
+            padding: 16px;
+            transition: all 0.25s;
+            border: 1px solid var(--panel-border);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-item:hover {
+            border-color: var(--volvo-light-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-item.active {
+            background: rgba(0, 48, 87, 0.03);
+            border-color: var(--volvo-blue);
+            box-shadow: 0 0 0 1px rgba(0, 48, 87, 0.2);
+        }
+
+        .card-item-title {
+            font-weight: 600;
+            font-size: 0.938rem;
+            margin-bottom: 6px;
+            color: var(--volvo-blue);
+        }
+
+        .card-item-desc {
+            font-size: 0.813rem;
+            color: var(--text-secondary);
+        }
+
+        /* Center - Preview */
+        .preview-container {
+            background: linear-gradient(135deg, #f8fafc, #e8eaed);
+            padding: 90px 32px 32px;
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .preview-controls {
+            display: flex;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .preview-control-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .preview-control-btn.active {
+            background: var(--volvo-blue);
+            color: white;
+        }
+
+        .preview-size-label {
+            display: flex;
+            align-items: center;
+            font-size: 0.813rem;
+            color: var(--text-secondary);
+            margin: 0 12px;
+        }
+
+        #preview-frame {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            min-height: 400px;
+            padding: 24px;
+            transition: all 0.3s;
+            width: 375px;
+            /* Mobile-first approach */
+            border: 1px solid var(--panel-border);
+        }
+
+        .preview-frame-desktop {
+            width: 600px !important;
+        }
+
+        .preview-frame-tablet {
+            width: 480px !important;
+        }
+
+        /* Right Panel - Properties */
+        .properties-panel {
+            background: var(--panel-bg);
+            border-left: 1px solid var(--panel-border);
+            padding: 90px 20px 20px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--input-border) transparent;
+        }
+
+        .property-group {
+            margin-bottom: 24px;
+            padding: 18px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .property-group-title {
+            font-weight: 600;
+            font-size: 0.938rem;
+            margin-bottom: 18px;
+            color: var(--volvo-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .property-row {
+            margin-bottom: 16px;
+        }
+
+        .property-label {
+            font-size: 0.813rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .property-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            font-family: 'Volvo Novum', sans-serif;
+        }
+
+        .property-input:focus {
+            outline: none;
+            border-color: var(--volvo-light-blue);
+            box-shadow: 0 0 0 3px rgba(28, 107, 186, 0.1);
+        }
+
+        .color-input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-preview {
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid var(--input-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-preview input[type="color"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .switch-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: var(--input-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .switch.active {
+            background: var(--volvo-blue);
+        }
+
+        .switch-toggle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .switch.active .switch-toggle {
+            transform: translateX(24px);
+        }
+
+        /* Code Output */
+        .code-output {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--panel-border);
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            z-index: 999;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .code-output.open {
+            transform: translateY(0);
+        }
+
+        .code-output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .code-output-content {
+            height: 600px;
+            /* Changed from 360px */
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+
+        .code-block {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'SF Mono', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            /* Changed from break-all for better readability */
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 12px;
+            background: var(--volvo-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--panel-border);
+            padding-bottom: 8px;
+        }
+
+        .tab {
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: var(--volvo-blue);
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 1280px) {
+            .app-container {
+                grid-template-columns: 280px 1fr 360px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+
+            .card-selector,
+            .properties-panel {
+                display: none;
+            }
+        }
+
+        /* Icons */
+        .icon {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .icon-md {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 100;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* Range Slider */
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: var(--input-border);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--volvo-blue);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--volvo-blue);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .range-value {
+            display: inline-block;
+            min-width: 44px;
+            text-align: right;
+            font-size: 0.875rem;
+            color: var(--volvo-blue);
+            font-weight: 500;
+        }
+
+        .powerbi-vars {
+            max-height: 200px;
+            overflow-y: auto;
+            background: var(--panel-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .powerbi-var-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px;
+        }
+
+        .powerbi-var-item label {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--card-border-radius, 0.75rem);
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03);
+            padding: 1.5rem;
+            transition: all var(--card-animation-duration, 0.2s);
+            filter: drop-shadow(var(--card-shadow-x, 0) var(--card-shadow-y, 2px) var(--card-shadow-blur, 4px) var(--card-shadow-color, rgba(0, 0, 0, 0.1)));
+            backdrop-filter: blur(var(--card-hover-blur, 0));
+            transform: rotate(var(--card-hover-rotate, 0)) scale(var(--card-hover-scale, 1));
+            letter-spacing: var(--card-letter-spacing, normal);
+            line-height: var(--card-line-height, 1.5);
+        }
+
+        .card:hover {
+            transform: translateY(calc(var(--card-hover-elevation, 2) * -1px));
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.06);
+        }
+
+        .design-tokens {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .design-token {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .design-token:hover {
+            transform: translateY(-2px);
+            border-color: var(--volvo-blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .token-preview {
+            width: 100%;
+            height: 36px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .token-name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .theme-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .theme-item {
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--panel-border);
+            background: white;
+        }
+
+        .theme-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--volvo-light-blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-preview {
+            height: 80px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+            padding: 4px;
+            background: var(--panel-bg);
+        }
+
+        .theme-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        /* Templates selector */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .template-item {
+            border: 1px solid var(--panel-border);
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .template-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--volvo-light-blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .template-preview {
+            height: 100px;
+            overflow: hidden;
+            position: relative;
+            background: var(--panel-bg);
+        }
+
+        .template-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .template-info {
+            padding: 10px;
+        }
+
+        .template-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .template-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Export options */
+        .export-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .export-option {
+            flex: 1;
+            padding: 16px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid var(--panel-border);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .export-option:hover {
+            border-color: var(--volvo-light-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .export-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--volvo-blue);
+        }
+
+        .export-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Font selector */
+        .font-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .font-option {
+            padding: 10px 16px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid var(--panel-border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .font-option:hover {
+            border-color: var(--volvo-light-blue);
+            transform: translateY(-2px);
+        }
+
+        .font-option.active {
+            background: rgba(0, 48, 87, 0.05);
+            border-color: var(--volvo-blue);
+        }
+
+        /* Fleet Styles */
+        .fleet-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .fleet-stat-item {
+            padding: 12px;
+            background: rgba(0, 48, 87, 0.05);
+            border-radius: 6px;
+        }
+
+        .fleet-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .fleet-stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--volvo-blue);
+        }
+
+        .fleet-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+        }
+
+        .trend-up {
+            color: var(--success-green);
+        }
+
+        .trend-down {
+            color: var(--volvo-red);
+        }
+
+        /* Delivery Status */
+        .delivery-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .status-on-time {
+            background-color: var(--success-green);
+        }
+
+        .status-delayed {
+            background-color: var(--warning-yellow);
+        }
+
+        .status-critical {
+            background-color: var(--volvo-red);
+        }
+
+        .delivery-bar {
+            height: 30px;
+            border-radius: 6px;
+            background: var(--panel-bg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .delivery-bar-segment {
+            height: 100%;
+            position: absolute;
+            top: 0;
+        }
+
+        .segment-on-time {
+            background-color: var(--success-green);
+            left: 0;
+            width: 75%;
+        }
+
+        .segment-delayed {
+            background-color: var(--warning-yellow);
+            left: 75%;
+            width: 18%;
+        }
+
+        .segment-critical {
+            background-color: var(--volvo-red);
+            left: 93%;
+            width: 7%;
+        }
+
+        .delivery-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+        }
+
+        .delivery-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .powerbi-button {
+            background-color: #f2c811;
+            color: #000;
+            border: none;
+            padding: 4px 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 360px;
+        }
+
+        .powerbi-button:hover {
+            background-color: #d1ab10;
+        }
+    </style>
+    <script>
+        function openPowerBI() {
+            window.open("https://app.powerbi.com/groups/3bf412db-7e84-4090-8221-726c33088cce/reports/405bb030-f6c9-4ba2-a348-6e23008dcf44?ctid=f25493ae-1c98-41d7-8a33-0be75f5fe603&pbi_source=linkShare", "_blank");
+        }
+    </script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo">
+            <!-- <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path fill="#003057"
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7zm0 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z">
+                </path>
+            </svg> -->
+            <img src="Volvo-Logo-2020-present.png" alt="Description de l'image" width="300" height="200">
+            <span class="logo-text" style="color:black"></span>
+        </div>
+        <div class="header-actions">
+            <button class="powerbi-button" onclick="openPowerBI()">PBI HTML Measure tool</button>
+
+        </div>
+
+    </div>
+
+    <div class="app-container">
+        <!-- Left Panel - Card Selector -->
+        <div class="card-selector">
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
+                </svg>
+                KPI Library
+
+            </div>
+            <div class="card-list" id="cardList">
+                <div class="card-item active" onclick="selectCard(cardTemplates[0])">
+                    <div class="card-item-title">Unique Visitors</div>
+                    <div class="card-item-desc">Card with value and percentage</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[1])">
+                    <div class="card-item-title">Goal with Progress Bar</div>
+                    <div class="card-item-desc">Card with progress bar</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[2])">
+                    <div class="card-item-title">Statistic with Icon</div>
+                    <div class="card-item-desc">Card with icon and colored background</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[3])">
+                    <div class="card-item-title">Card with Mini Chart</div>
+                    <div class="card-item-desc">Statistic with visualization</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[4])">
+                    <div class="card-item-title">Dual Metric</div>
+                    <div class="card-item-desc">Card with two values</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[5])">
+                    <div class="card-item-title">Metrics List</div>
+                    <div class="card-item-desc">Card with multiple indicators</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[6])">
+                    <div class="card-item-title">Status Card</div>
+                    <div class="card-item-desc">Indicator with state</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[7])">
+                    <div class="card-item-title">Big Number</div>
+                    <div class="card-item-desc">Centered card with large value</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[8])">
+                    <div class="card-item-title">Metrics Grid</div>
+                    <div class="card-item-desc">Four values in grid</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[9])">
+                    <div class="card-item-title">Alert Card</div>
+                    <div class="card-item-desc">Notification with icon</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[10])">
+                    <div class="card-item-title">Circular Progress</div>
+                    <div class="card-item-desc">Score with circle</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[11])">
+                    <div class="card-item-title">Compact Statistic</div>
+                    <div class="card-item-desc">Minimal statistic display</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[12])">
+                    <div class="card-item-title">Maintenance Alert</div>
+                    <div class="card-item-desc">Critical maintenance notification</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[13])">
+                    <div class="card-item-title">Fleet Efficiency</div>
+                    <div class="card-item-desc">Fleet overview</div>
+                </div>
+
+                <div class="card-item " onclick="selectCard(cardTemplates[14])">
+                    <div class="card-item-title">Delivery Performance</div>
+                    <div class="card-item-desc">Delivery statistics</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center - Preview -->
+        <div class="preview-container">
+            <div class="preview-controls">
+                <button class="preview-control-btn active" onclick="switchPreviewMode('mobile')">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path
+                            d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z">
+                        </path>
+                    </svg>
+                </button>
+                <button class="preview-control-btn" onclick="switchPreviewMode('tablet')">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19 18H5V6h14v12zm0-16H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z">
+                        </path>
+                    </svg>
+                </button>
+                <button class="preview-control-btn" onclick="switchPreviewMode('desktop')">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z">
+                        </path>
+                    </svg>
+                </button>
+                <span class="preview-size-label" id="previewSizeLabel">375px</span>
+            </div>
+            <div id="preview-frame">
+                <style>
+                    * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                    }
+
+                    body {
+                        font-family: 'Volvo Novum', 'Inter', sans-serif;
+                    }
+
+                    :root {
+                        --card-border-radius: 0.75rem;
+                        --card-animation-duration: 0.2s;
+                        --card-hover-elevation: 2;
+                    }
+
+                    .card {
+                        background-color: white;
+                        border-radius: var(--card-border-radius, 0.75rem);
+                        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03);
+                        padding: 1.5rem;
+                        transition: all var(--card-animation-duration, 0.2s);
+                        filter: drop-shadow(var(--card-shadow-x, 0) var(--card-shadow-y, 2px) var(--card-shadow-blur, 4px) var(--card-shadow-color, rgba(0, 0, 0, 0.1)));
+                        backdrop-filter: blur(var(--card-hover-blur, 0));
+                        transform: rotate(var(--card-hover-rotate, 0)) scale(var(--card-hover-scale, 1));
+                        letter-spacing: var(--card-letter-spacing, normal);
+                        line-height: var(--card-line-height, 1.5);
+                    }
+
+                    .card:hover {
+                        transform: translateY(calc(var(--card-hover-elevation, 2) * -1px));
+                        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.06);
+                    }
+
+                    .card-border-top {
+                        border-top: 4px solid;
+                    }
+
+                    .card-border-left {
+                        border-left: 4px solid;
+                    }
+
+                    .text-sm {
+                        font-size: 0.875rem;
+                    }
+
+                    .text-xs {
+                        font-size: 0.75rem;
+                    }
+
+                    .text-base {
+                        font-size: 1rem;
+                    }
+
+                    .text-xl {
+                        font-size: 1.25rem;
+                    }
+
+                    .text-2xl {
+                        font-size: 1.5rem;
+                    }
+
+                    .text-3xl {
+                        font-size: 1.875rem;
+                    }
+
+                    .text-4xl {
+                        font-size: 2.25rem;
+                    }
+
+                    .text-5xl {
+                        font-size: 3rem;
+                    }
+
+                    .font-medium {
+                        font-weight: 500;
+                    }
+
+                    .font-semibold {
+                        font-weight: 600;
+                    }
+
+                    .font-bold {
+                        font-weight: 700;
+                    }
+
+                    .font-extrabold {
+                        font-weight: 800;
+                    }
+
+                    .mb-0 {
+                        margin-bottom: 0;
+                    }
+
+                    .mb-1 {
+                        margin-bottom: 0.25rem;
+                    }
+
+                    .mb-2 {
+                        margin-bottom: 0.5rem;
+                    }
+
+                    .mb-3 {
+                        margin-bottom: 0.75rem;
+                    }
+
+                    .mb-4 {
+                        margin-bottom: 1rem;
+                    }
+
+                    .mt-1 {
+                        margin-top: 0.25rem;
+                    }
+
+                    .mt-3 {
+                        margin-top: 0.75rem;
+                    }
+
+                    .mt-4 {
+                        margin-top: 1rem;
+                    }
+
+                    .mr-1 {
+                        margin-right: 0.25rem;
+                    }
+
+                    .mr-2 {
+                        margin-right: 0.5rem;
+                    }
+
+                    .flex {
+                        display: flex;
+                    }
+
+                    .items-center {
+                        align-items: center;
+                    }
+
+                    .items-start {
+                        align-items: flex-start;
+                    }
+
+                    .justify-between {
+                        justify-content: space-between;
+                    }
+
+                    .justify-center {
+                        justify-content: center;
+                    }
+
+                    .space-x-3>*+* {
+                        margin-left: 0.75rem;
+                    }
+
+                    .space-x-4>*+* {
+                        margin-left: 1rem;
+                    }
+
+                    .space-y-3>*+* {
+                        margin-top: 0.75rem;
+                    }
+
+                    .flex-shrink-0 {
+                        flex-shrink: 0;
+                    }
+
+                    .grid-2-cols {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 1rem;
+                    }
+
+                    .text-center {
+                        text-align: center;
+                    }
+
+                    .text-right {
+                        text-align: right;
+                    }
+
+                    .inline-block {
+                        display: inline-block;
+                    }
+
+                    .uppercase {
+                        text-transform: uppercase;
+                    }
+
+                    .tracking-wider {
+                        letter-spacing: 0.05em;
+                    }
+
+                    .rounded {
+                        border-radius: 0.25rem;
+                    }
+
+                    .rounded-full {
+                        border-radius: 9999px;
+                    }
+
+                    .rounded-r-lg {
+                        border-top-right-radius: 0.5rem;
+                        border-bottom-right-radius: 0.5rem;
+                    }
+
+                    .px-2 {
+                        padding-left: 0.5rem;
+                        padding-right: 0.5rem;
+                    }
+
+                    .px-3 {
+                        padding-left: 0.75rem;
+                        padding-right: 0.75rem;
+                    }
+
+                    .py-0-5 {
+                        padding-top: 0.125rem;
+                        padding-bottom: 0.125rem;
+                    }
+
+                    .py-1 {
+                        padding-top: 0.25rem;
+                        padding-bottom: 0.25rem;
+                    }
+
+                    .p-3 {
+                        padding: 0.75rem;
+                    }
+
+                    .p-4 {
+                        padding: 1rem;
+                    }
+
+                    .border-r {
+                        border-right: 1px solid;
+                    }
+
+                    .border-gray-200 {
+                        border-right-color: #e5e7eb;
+                    }
+
+                    .icon {
+                        width: 1rem;
+                        height: 1rem;
+                        vertical-align: middle;
+                    }
+
+                    .icon-md {
+                        width: 1.5rem;
+                        height: 1.5rem;
+                    }
+
+                    .icon-lg {
+                        width: 2rem;
+                        height: 2rem;
+                    }
+
+                    .icon-xl {
+                        width: 2.5rem;
+                        height: 2.5rem;
+                    }
+
+                    .progress-bar-bg {
+                        background-color: #e5e7eb;
+                        border-radius: 9999px;
+                        overflow: hidden;
+                        height: 8px;
+                        width: 100%;
+                        margin-bottom: 0.25rem;
+                    }
+
+                    .progress-bar-fill {
+                        height: 100%;
+                        border-radius: 9999px;
+                    }
+
+                    .mini-bar-chart {
+                        display: flex;
+                        align-items: flex-end;
+                        height: 40px;
+                        gap: 3px;
+                    }
+
+                    .mini-bar {
+                        background-color: #a9a9a9;
+                        width: 6px;
+                        border-radius: 2px 2px 0 0;
+                    }
+
+                    .bar-95 {
+                        height: 95%;
+                    }
+
+                    .bar-98 {
+                        height: 98%;
+                    }
+
+                    .bar-96 {
+                        height: 96%;
+                    }
+
+                    .bar-97 {
+                        height: 97%;
+                    }
+
+                    .bar-94 {
+                        height: 94%;
+                    }
+
+                    .bar-92 {
+                        height: 92%;
+                    }
+
+                    .status-dot {
+                        display: inline-block;
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                        margin-right: 6px;
+                    }
+
+                    .circle-container {
+                        position: relative;
+                        width: 6rem;
+                        height: 6rem;
+                        margin: 0 auto 0.5rem auto;
+                    }
+
+                    .circle-bg {
+                        fill: none;
+                        stroke: #e5e7eb;
+                        stroke-width: 10;
+                    }
+
+                    .circle-progress {
+                        fill: none;
+                        stroke-width: 10;
+                        stroke-linecap: round;
+                        stroke-dasharray: 251.2;
+                        transform: rotate(-90deg);
+                        transform-origin: center;
+                    }
+
+                    .circle-text {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                    }
+
+                    /* Fleet Efficiency Styles */
+                    .fleet-stats-grid {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 10px;
+                    }
+
+                    .fleet-stat-item {
+                        padding: 12px;
+                        background: rgba(0, 48, 87, 0.05);
+                        border-radius: 6px;
+                    }
+
+                    .fleet-stat-label {
+                        font-size: 0.75rem;
+                        color: #6b7280;
+                        margin-bottom: 4px;
+                    }
+
+                    .fleet-stat-value {
+                        font-size: 1.25rem;
+                        font-weight: 600;
+                        color: #003057;
+                    }
+
+                    .fleet-trend {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        font-size: 0.75rem;
+                        margin-top: 4px;
+                    }
+
+                    .trend-up {
+                        color: #22c55e;
+                    }
+
+                    .trend-down {
+                        color: #e60013;
+                    }
+
+                    /* Delivery Status Styles */
+                    .delivery-status {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        margin-bottom: 10px;
+                    }
+
+                    .status-indicator {
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 50%;
+                    }
+
+                    .status-on-time {
+                        background-color: #22c55e;
+                    }
+
+                    .status-delayed {
+                        background-color: #f59e0b;
+                    }
+
+                    .status-critical {
+                        background-color: #e60013;
+                    }
+
+                    .delivery-bar {
+                        height: 30px;
+                        border-radius: 6px;
+                        background: #f2f3f5;
+                        overflow: hidden;
+                        position: relative;
+                    }
+
+                    .delivery-bar-segment {
+                        height: 100%;
+                        position: absolute;
+                        top: 0;
+                    }
+
+                    .segment-on-time {
+                        background-color: #22c55e;
+                        left: 0;
+                        width: 75%;
+                    }
+
+                    .segment-delayed {
+                        background-color: #f59e0b;
+                        left: 75%;
+                        width: 18%;
+                    }
+
+                    .segment-critical {
+                        background-color: #e60013;
+                        left: 93%;
+                        width: 7%;
+                    }
+
+                    .delivery-labels {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: 6px;
+                    }
+
+                    .delivery-label {
+                        font-size: 0.75rem;
+                        color: #6b7280;
+                    }
+                </style>
+
+                <div class="card card-border-top" style="border-top-color: #003057">
+                    <p class="text-sm font-medium" style="color: #6b7280">Unique Visitors</p>
+                    <p class="text-4xl font-extrabold" style="color: #1f2937">10,458</p>
+                    <div class="flex items-center text-sm">
+                        <span class="flex items-center font-semibold mr-2" style="color: #10b981">
+                            <svg class="icon mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18">
+                                </path>
+                            </svg>
+                            +12.5%
+                        </span>
+                        <span style="color: #9ca3af">vs last month</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Properties -->
+        <div class="properties-panel">
+            <div class="section-title">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M12 2l-5.5 9h11z M17.5 11l-11 0L12 21z"></path>
+                </svg>
+                Customize Your KPI
+            </div>
+
+            <div class="property-group animate-in">
+                <div class="property-group-title">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01">
+                        </path>
+                    </svg>
+                    Volvo Design System
+                </div>
+
+                <div class="property-row">
+                    <div class="property-label">Brand Colors</div>
+                    <div class="design-tokens" id="colorTokens">
+                        <div class="design-token" onclick="applyColorToken('primary', '#003057')">
+                            <div class="token-preview" style="background-color: #003057"></div>
+                            <div class="token-name">Volvo Blue</div>
+                        </div>
+                        <div class="design-token" onclick="applyColorToken('secondary', '#1c6bba')">
+                            <div class="token-preview" style="background-color: #1c6bba"></div>
+                            <div class="token-name">Light Blue</div>
+                        </div>
+                        <div class="design-token" onclick="applyColorToken('accent', '#e60013')">
+                            <div class="token-preview" style="background-color: #e60013"></div>
+                            <div class="token-name">Volvo Red</div>
+                        </div>
+                        <div class="design-token" onclick="applyColorToken('neutral', '#7c7c7c')">
+                            <div class="token-preview" style="background-color: #7c7c7c"></div>
+                            <div class="token-name">Volvo Gray</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-row">
+                    <div class="property-label">Recommended Themes</div>
+                    <div class="theme-selector">
+                        <div class="theme-item" onclick="applyTheme('volvo')" style="border-color: #003057;">
+                            <div class="theme-preview">
+                                <div style="background: #003057"></div>
+                                <div style="background: #e60013"></div>
+                            </div>
+                            <div class="theme-name">Volvo Corporate</div>
+                        </div>
+                        <div class="theme-item" onclick="applyTheme('logistics')">
+                            <div class="theme-preview">
+                                <div style="background: #1c6bba"></div>
+                                <div style="background: #7c7c7c"></div>
+                            </div>
+                            <div class="theme-name">Logistics</div>
+                        </div>
+                        <div class="theme-item" onclick="applyTheme('data')">
+                            <div class="theme-preview">
+                                <div style="background: linear-gradient(135deg, #003057, #1c6bba)"></div>
+                                <div style="background: #f2f3f5"></div>
+                            </div>
+                            <div class="theme-name">Data Viz</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-row">
+                    <div class="property-label">Layout Templates</div>
+                    <div class="templates-grid">
+                        <div class="template-item" onclick="applyTemplate('dashboard')">
+                            <div class="template-preview">
+                                <div
+                                    style="background: #f8f9fa; height: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 6px;">
+                                    <div style="background: white; border-radius: 4px;"></div>
+                                    <div style="background: white; border-radius: 4px;"></div>
+                                    <div style="background: white; border-radius: 4px;"></div>
+                                    <div style="background: white; border-radius: 4px;"></div>
+                                </div>
+                            </div>
+                            <div class="template-info">
+                                <div class="template-name">Dashboard 2x2</div>
+                                <div class="template-desc">Balanced KPI grid</div>
+                            </div>
+                        </div>
+                        <div class="template-item" onclick="applyTemplate('spotlight')">
+                            <div class="template-preview">
+                                <div
+                                    style="background: #f8f9fa; height: 100%; display: flex; flex-direction: column; gap: 6px; padding: 6px;">
+                                    <div style="background: white; border-radius: 4px; height: 60%;"></div>
+                                    <div style="display: flex; gap: 6px; height: 40%">
+                                        <div style="background: white; border-radius: 4px; flex: 1;"></div>
+                                        <div style="background: white; border-radius: 4px; flex: 1;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="template-info">
+                                <div class="template-name">Spotlight KPI</div>
+                                <div class="template-desc">Focus on main KPI</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="propertiesContent">
+                <div class="property-group animate-in">
+                    <div class="property-group-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5h12M3 12h18m-9 7h9"></path>
+                        </svg>
+                        Content
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Label</div>
+                        <input type="text" class="property-input" value="Unique Visitors"
+                            onchange="updateProperty('label', this.value)"
+                            oninput="updateProperty('label', this.value)">
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Value</div>
+                        <input type="text" class="property-input" value="10,458"
+                            onchange="updateProperty('value', this.value)"
+                            oninput="updateProperty('value', this.value)">
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Trend Value</div>
+                        <input type="text" class="property-input" value="+12.5%"
+                            onchange="updateProperty('trendValue', this.value)"
+                            oninput="updateProperty('trendValue', this.value)">
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Sub Text</div>
+                        <input type="text" class="property-input" value="vs last month"
+                            onchange="updateProperty('subText', this.value)"
+                            oninput="updateProperty('subText', this.value)">
+                    </div>
+                </div>
+                <div class="property-group animate-in">
+                    <div class="property-group-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.5a5.5 5.5 0 1 1 7.5 8.5L12 22l-7.5-7.5A5.5 5.5 0 1 1 12 6.5"></path>
+                        </svg>
+                        Colors
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Border Color</div>
+                        <div class="color-input-wrapper">
+                            <div class="color-preview" data-color="borderColor" style="background-color: #003057">
+                                <input type="color" value="#003057"
+                                    onchange="updateProperty('borderColor', this.value)">
+                            </div>
+                            <input type="text" class="property-input" value="#003057"
+                                onchange="updateProperty('borderColor', this.value)"
+                                oninput="updateProperty('borderColor', this.value)">
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Label Color</div>
+                        <div class="color-input-wrapper">
+                            <div class="color-preview" data-color="labelColor" style="background-color: #6b7280">
+                                <input type="color" value="#6b7280" onchange="updateProperty('labelColor', this.value)">
+                            </div>
+                            <input type="text" class="property-input" value="#6b7280"
+                                onchange="updateProperty('labelColor', this.value)"
+                                oninput="updateProperty('labelColor', this.value)">
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Value Color</div>
+                        <div class="color-input-wrapper">
+                            <div class="color-preview" data-color="valueColor" style="background-color: #1f2937">
+                                <input type="color" value="#1f2937" onchange="updateProperty('valueColor', this.value)">
+                            </div>
+                            <input type="text" class="property-input" value="#1f2937"
+                                onchange="updateProperty('valueColor', this.value)"
+                                oninput="updateProperty('valueColor', this.value)">
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Trend Color</div>
+                        <div class="color-input-wrapper">
+                            <div class="color-preview" data-color="trendColor" style="background-color: #10b981">
+                                <input type="color" value="#10b981" onchange="updateProperty('trendColor', this.value)">
+                            </div>
+                            <input type="text" class="property-input" value="#10b981"
+                                onchange="updateProperty('trendColor', this.value)"
+                                oninput="updateProperty('trendColor', this.value)">
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Sub Text Color</div>
+                        <div class="color-input-wrapper">
+                            <div class="color-preview" data-color="subTextColor" style="background-color: #9ca3af">
+                                <input type="color" value="#9ca3af"
+                                    onchange="updateProperty('subTextColor', this.value)">
+                            </div>
+                            <input type="text" class="property-input" value="#9ca3af"
+                                onchange="updateProperty('subTextColor', this.value)"
+                                oninput="updateProperty('subTextColor', this.value)">
+                        </div>
+                    </div>
+                </div>
+                <div class="property-group animate-in">
+                    <div class="property-group-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 6v15h-2v-15h-5v-2h12v2h-5z"></path>
+                        </svg>
+                        Typography
+                    </div>
+
+                    <div class="property-row">
+                        <div class="property-label">Main Font</div>
+                        <div class="font-selector">
+                            <div class="font-option active" onclick="applyFont('Volvo Novum')">Volvo Novum</div>
+                            <div class="font-option" onclick="applyFont('Inter')">Inter</div>
+                            <div class="font-option" onclick="applyFont('Arial')">Arial</div>
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Letter Spacing (px)</div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="-2" max="10" value="0" step="0.5"
+                                onchange="updateCardStyle('letter-spacing', this.value + 'px')"
+                                oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                            <span class="range-value">0px</span>
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Line Height</div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="1" max="2" value="1.5" step="0.1"
+                                onchange="updateCardStyle('line-height', this.value)"
+                                oninput="this.nextElementSibling.textContent = this.value">
+                            <span class="range-value">1.5</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="property-group animate-in">
+                    <div class="property-group-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Animations
+                    </div>
+
+                    <div class="property-row">
+                        <div class="property-label">Border Radius (px)</div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="0" max="24" value="12" class="property-input"
+                                onchange="updateCardStyle('border-radius', this.value + 'px')"
+                                oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                            <span class="range-value">12px</span>
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Hover Animation</div>
+                        <div class="switch-wrapper">
+                            <div class="switch active" onclick="toggleHoverAnimation(this)">
+                                <div class="switch-toggle"></div>
+                            </div>
+                            <span class="property-label">Enabled</span>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Transition Duration (ms)</div>
+                            <div class="flex items-center gap-2">
+                                <input type="range" min="100" max="1000" value="200" class="property-input"
+                                    onchange="updateCardStyle('animation-duration', this.value + 'ms')"
+                                    oninput="this.nextElementSibling.textContent = this.value + 'ms'">
+                                <span class="range-value">200ms</span>
+                            </div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Hover Elevation (px)</div>
+                            <div class="flex items-center gap-2">
+                                <input type="range" min="0" max="10" value="2" class="property-input"
+                                    onchange="updateCardStyle('hover-elevation', this.value)"
+                                    oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                                <span class="range-value">2px</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="property-group animate-in">
+                    <div class="property-group-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h18v18H3zM12 8v8m-4-4h8"></path>
+                        </svg>
+                        Power BI Options
+                    </div>
+
+                    <div class="property-row">
+                        <div class="property-label">Power BI Mode</div>
+                        <div class="switch-wrapper">
+                            <div class="switch" onclick="togglePowerBI(this)">
+                                <div class="switch-toggle"></div>
+                            </div>
+                            <span class="property-label">Disabled</span>
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Variable Prefix</div>
+                        <input type="text" class="property-input" value="volvokpi_"
+                            onchange="updatePowerBIPrefix(this.value)">
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Power BI Variables</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <button class="btn btn-secondary" style="font-size: 12px; padding: 4px 8px;"
+                                onclick="selectAllPowerBIVars(true)">Select All</button>
+                            <button class="btn btn-secondary" style="font-size: 12px; padding: 4px 8px;"
+                                onclick="selectAllPowerBIVars(false)">Deselect All</button>
+                        </div>
+                        <div class="powerbi-vars" style="max-height: 300px; overflow-y: auto;">
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_label" data-var="label"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_label" style="flex: 1; cursor: pointer;">label</label>
+                                <input type="text" class="property-input" style="width: 140px;" value="volvokpi_label"
+                                    onchange="updatePowerBIVarName('label', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_value" data-var="value"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_value" style="flex: 1; cursor: pointer;">value</label>
+                                <input type="text" class="property-input" style="width: 140px;" value="volvokpi_value"
+                                    onchange="updatePowerBIVarName('value', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_trendValue" data-var="trendValue"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_trendValue" style="flex: 1; cursor: pointer;">trendValue</label>
+                                <input type="text" class="property-input" style="width: 140px;"
+                                    value="volvokpi_trendValue"
+                                    onchange="updatePowerBIVarName('trendValue', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_trendIcon" data-var="trendIcon"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_trendIcon" style="flex: 1; cursor: pointer;">trendIcon</label>
+                                <input type="text" class="property-input" style="width: 140px;"
+                                    value="volvokpi_trendIcon" onchange="updatePowerBIVarName('trendIcon', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_subText" data-var="subText"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_subText" style="flex: 1; cursor: pointer;">subText</label>
+                                <input type="text" class="property-input" style="width: 140px;" value="volvokpi_subText"
+                                    onchange="updatePowerBIVarName('subText', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_borderColor" data-var="borderColor"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_borderColor" style="flex: 1; cursor: pointer;">borderColor</label>
+                                <input type="text" class="property-input" style="width: 140px;"
+                                    value="volvokpi_borderColor"
+                                    onchange="updatePowerBIVarName('borderColor', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_labelColor" data-var="labelColor"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_labelColor" style="flex: 1; cursor: pointer;">labelColor</label>
+                                <input type="text" class="property-input" style="width: 140px;"
+                                    value="volvokpi_labelColor"
+                                    onchange="updatePowerBIVarName('labelColor', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_valueColor" data-var="valueColor"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_valueColor" style="flex: 1; cursor: pointer;">valueColor</label>
+                                <input type="text" class="property-input" style="width: 140px;"
+                                    value="volvokpi_valueColor"
+                                    onchange="updatePowerBIVarName('valueColor', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_trendColor" data-var="trendColor"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_trendColor" style="flex: 1; cursor: pointer;">trendColor</label>
+                                <input type="text" class="property-input" style="width: 140px;"
+                                    value="volvokpi_trendColor"
+                                    onchange="updatePowerBIVarName('trendColor', this.value)">
+                            </div>
+
+                            <div class="powerbi-var-item"
+                                style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                <input type="checkbox" id="pbi_subTextColor" data-var="subTextColor"
+                                    style="width: 16px; height: 16px; margin-right: 8px;"
+                                    onchange="updatePowerBIVars(this)">
+                                <label for="pbi_subTextColor" style="flex: 1; cursor: pointer;">subTextColor</label>
+                                <input type="text" class="property-input" style="width: 140px;"
+                                    value="volvokpi_subTextColor"
+                                    onchange="updatePowerBIVarName('subTextColor', this.value)">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="property-group animate-in">
+                    <div class="property-group-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.5 16c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm7-13h-14c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z">
+                            </path>
+                        </svg>
+                        Effects
+                    </div>
+
+                    <div class="property-row">
+                        <div class="property-label">Shadow X (px)</div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="-20" max="20" value="0"
+                                onchange="updateCardStyle('shadow-x', this.value + 'px')"
+                                oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                            <span class="range-value">0px</span>
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Shadow Y (px)</div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="-20" max="20" value="2"
+                                onchange="updateCardStyle('shadow-y', this.value + 'px')"
+                                oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                            <span class="range-value">2px</span>
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Hover Blur (px)</div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="0" max="10" value="0"
+                                onchange="updateCardStyle('hover-blur', this.value + 'px')"
+                                oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                            <span class="range-value">0px</span>
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Hover Rotation (deg)</div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="-5" max="5" value="0" step="0.5"
+                                onchange="updateCardStyle('hover-rotate', this.value + 'deg')"
+                                oninput="this.nextElementSibling.textContent = this.value + '°'">
+                            <span class="range-value">0°</span>
+                        </div>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Hover Scale</div>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="0.9" max="1.1" step="0.01" value="1"
+                                onchange="updateCardStyle('hover-scale', this.value)"
+                                oninput="this.nextElementSibling.textContent = this.value">
+                            <span class="range-value">1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-group animate-in">
+                <div class="property-group-title">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19 19H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.6l-9.8 9.8 1.4 1.4L19 6.4V10h2V3h-7z">
+                        </path>
+                    </svg>
+                    Export Code
+                    <button class="btn btn-secondary" onclick="toggleCodeOutput()">
+                        <svg class="icon" style="vertical-align: middle;" viewBox="0 0 24 24">
+                            <path
+                                d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z">
+                            </path>
+                        </svg>
+                        View Code
+                    </button>
+                </div>
+
+                <div class="property-row">
+                    <div class="property-label">Background Options</div>
+                    <div class="switch-wrapper mb-4">
+                        <div class="switch" onclick="toggleContainerBackground(this)">
+                            <div class="switch-toggle"></div>
+                        </div>
+                        <span class="property-label">Transparent Background</span>
+                    </div>
+                    <div class="property-row">
+                        <div class="property-label">Container Spacing</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div>
+                                <label class="property-label" style="font-size: 0.75rem;">Padding (px)</label>
+                                <input type="number" class="property-input" id="exportPadding" value="0" min="0"
+                                    max="100">
+                            </div>
+                            <div>
+                                <label class="property-label" style="font-size: 0.75rem;">Margin (px)</label>
+                                <input type="number" class="property-input" id="exportMargin" value="0" min="0"
+                                    max="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="export-options">
+                        <div class="export-option" onclick="exportFormat('html')" style="flex: 1">
+                            <div class="export-icon">&lt;/&gt;</div>
+                            <div class="export-name">Copy as HTML/CSS</div>
+                        </div>
+                        <div class="export-option" onclick="exportFormat('powerbi')" style="flex: 1">
+                            <div class="export-icon">
+                                <svg class="icon-md" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="currentColor" d="M4 16 q0-1 1-1 q1 0 1 1 L6 20 L4 20 Z
+                                             M7 13 q0-1 1-1 q1 0 1 1 L9 20 L7 20 Z
+                                             M10 10 q0-1 1-1 q1 0 1 1 L12 20 L10 20 Z
+                                             M13 7 q0-1 1-1 q1 0 1 1 L15 20 L13 20 Z
+                                             M16 4 q0-1 1-1 q1 0 1 1 L18 20 L16 20 Z" />
+                                </svg>
+                            </div>
+                            <div class="export-name">Copy as Power BI</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Output -->
+    <div class="code-output" id="codeOutput">
+        <div class="code-output-header">
+            <h3>Generated Code</h3>
+            <button class="btn btn-secondary" onclick="toggleCodeOutput()">Close</button>
+        </div>
+        <div class="code-output-content">
+            <div class="code-block" style="position: relative;">
+                <button class="copy-btn" onclick="copyCode()">Copy</button>
+                <code id="generatedCode">
+&lt;!-- Volvo Group KPI Designer - Unique Visitors --&gt;
+&lt;style&gt;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Volvo Novum', sans-serif;
+}
+
+                .card {
+                    background-color: white;
+                    border-radius: var(--card-border-radius, 0.75rem);
+                    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03);
+                    padding: 1.5rem;
+                    transition: all var(--card-animation-duration, 0.2s);
+                    filter: drop-shadow(var(--card-shadow-x, 0) var(--card-shadow-y, 2px) var(--card-shadow-blur, 4px) var(--card-shadow-color, rgba(0,0,0,0.1)));
+                    backdrop-filter: blur(var(--card-hover-blur, 0));
+                    transform: rotate(var(--card-hover-rotate, 0)) scale(var(--card-hover-scale, 1));
+                    letter-spacing: var(--card-letter-spacing, normal);
+                    line-height: var(--card-line-height, 1.5);
+                }
+                .card:hover {
+                    transform: translateY(calc(var(--card-hover-elevation, 2) * -1px));
+                    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.06);
+                }
+                .card-border-top { border-top: 4px solid; }
+                .card-border-left { border-left: 4px solid; }
+                .text-sm { font-size: 0.875rem; }
+                .text-xs { font-size: 0.75rem; }
+                .text-base { font-size: 1rem; }
+                .text-xl { font-size: 1.25rem; }
+                .text-2xl { font-size: 1.5rem; }
+                .text-3xl { font-size: 1.875rem; }
+                .text-4xl { font-size: 2.25rem; }
+                .text-5xl { font-size: 3rem; }
+                .font-medium { font-weight: 500; }
+                .font-semibold { font-weight: 600; }
+                .font-bold { font-weight: 700; }
+                .font-extrabold { font-weight: 800; }
+                .mb-0 { margin-bottom: 0; }
+                .mb-1 { margin-bottom: 0.25rem; }
+                .mb-2 { margin-bottom: 0.5rem; }
+                .mb-3 { margin-bottom: 0.75rem; }
+                .mb-4 { margin-bottom: 1rem; }
+                .mt-1 { margin-top: 0.25rem; }
+                .mt-3 { margin-top: 0.75rem; }
+                .mt-4 { margin-top: 1rem; }
+                .mr-1 { margin-right: 0.25rem; }
+                .mr-2 { margin-right: 0.5rem; }
+                .flex { display: flex; }
+                .items-center { align-items: center; }
+                .items-start { align-items: flex-start; }
+                .justify-between { justify-content: space-between; }
+                .justify-center { justify-content: center; }
+                .space-x-3 &gt; * + * { margin-left: 0.75rem; }
+                .space-x-4 &gt; * + * { margin-left: 1rem; }
+                .space-y-3 &gt; * + * { margin-top: 0.75rem; }
+                .flex-shrink-0 { flex-shrink: 0; }
+                .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+                .text-center { text-align: center; }
+                .text-right { text-align: right; }
+                .inline-block { display: inline-block; }
+                .uppercase { text-transform: uppercase; }
+                .tracking-wider { letter-spacing: 0.05em; }
+                .rounded { border-radius: 0.25rem; }
+                .rounded-full { border-radius: 9999px; }
+                .rounded-r-lg { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
+                .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+                .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+                .py-0-5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+                .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+                .p-3 { padding: 0.75rem; }
+                .p-4 { padding: 1rem; }
+                .border-r { border-right: 1px solid; }
+                .border-gray-200 { border-right-color: #e5e7eb; }
+                .icon { width: 1rem; height: 1rem; vertical-align: middle; }
+                .icon-md { width: 1.5rem; height: 1.5rem; }
+                .icon-lg { width: 2rem; height: 2rem; }
+                .icon-xl { width: 2.5rem; height: 2.5rem; }
+                .progress-bar-bg { background-color: #e5e7eb; border-radius: 9999px; overflow: hidden; height: 8px; width: 100%; margin-bottom: 0.25rem; }
+                .progress-bar-fill { height: 100%; border-radius: 9999px; }
+                .mini-bar-chart { display: flex; align-items: flex-end; height: 40px; gap: 3px; }
+                .mini-bar { background-color: #a9a9a9; width: 6px; border-radius: 2px 2px 0 0; }
+                .bar-95 { height: 95%; }
+                .bar-98 { height: 98%; }
+                .bar-96 { height: 96%; }
+                .bar-97 { height: 97%; }
+                .bar-94 { height: 94%; }
+                .bar-92 { height: 92%; }
+                .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+                .circle-container { position: relative; width: 6rem; height: 6rem; margin: 0 auto 0.5rem auto; }
+                .circle-bg { fill: none; stroke: #e5e7eb; stroke-width: 10; }
+                .circle-progress { fill: none; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 251.2; transform: rotate(-90deg); transform-origin: center; }
+                .circle-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; font-weight: 700; }
+                
+                /* Fleet Efficiency Styles */
+                .fleet-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 10px;
+                }
+                .fleet-stat-item {
+                    padding: 12px;
+                    background: rgba(0, 48, 87, 0.05);
+                    border-radius: 6px;
+                }
+                .fleet-stat-label {
+                    font-size: 0.75rem;
+                    color: #6b7280;
+                    margin-bottom: 4px;
+                }
+                .fleet-stat-value {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    color: #003057;
+                }
+                .fleet-trend {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    font-size: 0.75rem;
+                    margin-top: 4px;
+                }
+                .trend-up {
+                    color: #22c55e;
+                }
+                .trend-down {
+                    color: #e60013;
+                }
+                
+                /* Delivery Status Styles */
+                .delivery-status {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 10px;
+                }
+                .status-indicator {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                }
+                .status-on-time {
+                    background-color: #22c55e;
+                }
+                .status-delayed {
+                    background-color: #f59e0b;
+                }
+                .status-critical {
+                    background-color: #e60013;
+                }
+                .delivery-bar {
+                    height: 30px;
+                    border-radius: 6px;
+                    background: #f2f3f5;
+                    overflow: hidden;
+                    position: relative;
+                }
+                .delivery-bar-segment {
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                }
+                .segment-on-time {
+                    background-color: #22c55e;
+                    left: 0;
+                    width: 75%;
+                }
+                .segment-delayed {
+                    background-color: #f59e0b;
+                    left: 75%;
+                    width: 18%;
+                }
+                .segment-critical {
+                    background-color: #e60013;
+                    left: 93%;
+                    width: 7%;
+                }
+                .delivery-labels {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 6px;
+                }
+                .delivery-label {
+                    font-size: 0.75rem;
+                    color: #6b7280;
+                }
+            
+&lt;/style&gt;
+&lt;div class='card card-border-top' style='border-top-color: #003057'&gt;
+                        &lt;p class='text-sm font-medium' style='color: #6b7280'&gt;Unique Visitors&lt;/p&gt;
+                        &lt;p class='text-4xl font-extrabold' style='color: #1f2937'&gt;10,458&lt;/p&gt;
+                        &lt;div class='flex items-center text-sm'&gt;
+                            &lt;span class='flex items-center font-semibold mr-2' style='color: #10b981'&gt;
+                                &lt;svg class='icon mr-1' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='3'&gt;
+                                    &lt;path stroke-linecap='round' stroke-linejoin='round' d='M5 10l7-7m0 0l7 7m-7-7v18' /&gt;
+                                &lt;/svg&gt;
+                                +12.5%
+                            &lt;/span&gt;
+                            &lt;span style='color: #9ca3af'&gt;vs last month&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;</code>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Card templates
+        const cardTemplates = [
+            {
+                id: 'visitors',
+                name: 'Unique Visitors',
+                description: 'Card with value and percentage',
+                template: `
+                    <div class='card card-border-top' style='border-top-color: {{borderColor}}'>
+                        <p class='text-sm font-medium' style='color: {{labelColor}}'>{{label}}</p>
+                        <p class='text-4xl font-extrabold' style='color: {{valueColor}}'>{{value}}</p>
+                        <div class='flex items-center text-sm'>
+                            <span class='flex items-center font-semibold mr-2' style='color: {{trendColor}}'>
+                                <svg class='icon mr-1' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='3'>
+                                    <path stroke-linecap='round' stroke-linejoin='round' d='{{trendIcon}}' />
+                                </svg>
+                                {{trendValue}}
+                            </span>
+                            <span style='color: {{subTextColor}}'>{{subText}}</span>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Unique Visitors',
+                    value: '10,458',
+                    trendValue: '+12.5%',
+                    trendIcon: 'M5 10l7-7m0 0l7 7m-7-7v18',
+                    subText: 'vs last month',
+                    borderColor: '#003057',
+                    labelColor: '#6b7280',
+                    valueColor: '#1f2937',
+                    trendColor: '#10b981',
+                    subTextColor: '#9ca3af'
+                }
+            },
+            {
+                id: 'progress',
+                name: 'Goal with Progress Bar',
+                description: 'Card with progress bar',
+                template: `
+                    <div class='card card-border-top' style='border-top-color: {{borderColor}}'>
+                        <p class='text-sm font-medium' style='color: {{labelColor}}'>{{label}}</p>
+                        <p class='text-4xl font-extrabold' style='color: {{valueColor}}'>{{value}}</p>
+                        <div class='progress-bar-bg' style='background-color: {{progressBgColor}}'>
+                            <div class='progress-bar-fill' style='width: {{progressValue}}; background-color: {{progressColor}}'></div>
+                        </div>
+                        <p class='text-xs text-right' style='color: {{subTextColor}}'>{{subText}}</p>
+                    </div>
+                `,
+                properties: {
+                    label: 'Truck Sales Target',
+                    value: '78%',
+                    progressValue: '78%',
+                    subText: 'Target: 500 units',
+                    borderColor: '#e60013',
+                    labelColor: '#6b7280',
+                    valueColor: '#1f2937',
+                    progressBgColor: '#e5e7eb',
+                    progressColor: '#e60013',
+                    subTextColor: '#9ca3af'
+                }
+            },
+            {
+                id: 'icon-stat',
+                name: 'Statistic with Icon',
+                description: 'Card with icon and colored background',
+                template: `
+                    <div class='card' style='background-color: {{bgColor}}'>
+                        <div class='flex items-center space-x-4'>
+                            <div class='p-3 rounded-full flex-shrink-0' style='background-color: {{iconBgColor}}'>
+                                <svg class='icon-xl' style='color: {{iconColor}}' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'>
+                                    <path stroke-linecap='round' stroke-linejoin='round' d='{{iconPath}}' />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class='text-sm font-medium mb-0' style='color: {{labelColor}}'>{{label}}</p>
+                                <p class='text-3xl font-bold' style='color: {{valueColor}}'>{{value}}</p>
+                                <p class='text-xs mt-1' style='color: {{subTextColor}}'>{{subText}}</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Completed Deliveries',
+                    value: '1,280',
+                    subText: '+5% today',
+                    bgColor: '#003057',
+                    iconBgColor: 'rgba(255, 255, 255, 0.2)',
+                    iconColor: '#ffffff',
+                    iconPath: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z',
+                    labelColor: 'rgba(255, 255, 255, 0.7)',
+                    valueColor: '#ffffff',
+                    subTextColor: 'rgba(255, 255, 255, 0.7)'
+                }
+            },
+            {
+                id: 'mini-chart',
+                name: 'Card with Mini Chart',
+                description: 'Statistic with visualization',
+                template: `
+                    <div class='card' style='background-color: {{bgColor}}'>
+                        <div class='flex justify-between items-start mb-3'>
+                            <div>
+                                <p class='text-sm font-medium mb-1' style='color: {{labelColor}}'>{{label}}</p>
+                                <p class='text-4xl font-extrabold' style='color: {{valueColor}}'>{{value}}</p>
+                            </div>
+                            <span class='flex items-center text-xs font-semibold mt-1' style='color: {{trendColor}}'>
+                                <svg class='icon mr-1' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='3'>
+                                    <path stroke-linecap='round' stroke-linejoin='round' d='{{trendIcon}}' />
+                                </svg>
+                                {{trendValue}}
+                            </span>
+                        </div>
+                        <div class='mini-bar-chart mt-4'>
+                            {{chartBars}}
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Fleet Availability',
+                    value: '96.5%',
+                    trendValue: '-0.5%',
+                    trendIcon: 'M19 14l-7 7m0 0l-7-7m7 7V3',
+                    bgColor: '#1f2937',
+                    labelColor: '#9ca3af',
+                    valueColor: '#ffffff',
+                    trendColor: '#ef4444',
+                    chartBars: `<div class='mini-bar bar-95'></div><div class='mini-bar bar-98'></div><div class='mini-bar bar-96'></div>`
+                }
+            },
+            {
+                id: 'dual-metric',
+                name: 'Dual Metric',
+                description: 'Card with two values',
+                template: `
+                    <div class='card card-border-top' style='border-top-color: {{borderColor}}'>
+                        <p class='text-sm font-medium mb-3' style='color: {{labelColor}}'>{{label}}</p>
+                        <div class='grid-2-cols'>
+                            <div class='text-center border-r border-gray-200'>
+                                <p class='text-xs font-semibold mb-1' style='color: {{metric1LabelColor}}'>{{metric1Label}}</p>
+                                <p class='text-2xl font-bold' style='color: {{metric1ValueColor}}'>{{metric1Value}}</p>
+                                <p class='text-xs mt-1' style='color: {{metric1TrendColor}}'>{{metric1Trend}}</p>
+                            </div>
+                            <div class='text-center'>
+                                <p class='text-xs font-semibold mb-1' style='color: {{metric2LabelColor}}'>{{metric2Label}}</p>
+                                <p class='text-2xl font-bold' style='color: {{metric2ValueColor}}'>{{metric2Value}}</p>
+                                <p class='text-xs mt-1' style='color: {{metric2TrendColor}}'>{{metric2Trend}}</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Operational Costs (Monthly)',
+                    metric1Label: 'Fuel',
+                    metric1Value: '15.2K€',
+                    metric1Trend: '+3%',
+                    metric2Label: 'Maintenance',
+                    metric2Value: '8.8K€',
+                    metric2Trend: '-5%',
+                    borderColor: '#7c7c7c',
+                    labelColor: '#6b7280',
+                    metric1LabelColor: '#e60013',
+                    metric1ValueColor: '#1f2937',
+                    metric1TrendColor: '#ef4444',
+                    metric2LabelColor: '#003057',
+                    metric2ValueColor: '#1f2937',
+                    metric2TrendColor: '#10b981'
+                }
+            },
+            {
+                id: 'list-metrics',
+                name: 'Metrics List',
+                description: 'Card with multiple indicators',
+                template: `
+                    <div class='card card-border-top' style='border-top-color: {{borderColor}}'>
+                        <p class='text-sm font-medium mb-4' style='color: {{labelColor}}'>{{label}}</p>
+                        <div class='space-y-3'>
+                            {{metricsList}}
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Workshop Performance',
+                    borderColor: '#9ca3af',
+                    labelColor: '#6b7280',
+                    metricsList: `
+                        <div class='flex justify-between items-center'>
+                            <p class='text-sm' style='color: #374151'>Completed Services</p>
+                            <span class='text-sm font-semibold px-2 py-0-5 rounded' style='color: #003057; background-color: #dbeafe'>85</span>
+                        </div>
+                        <div class='flex justify-between items-center'>
+                            <p class='text-sm' style='color: #374151'>Average Time/Service</p>
+                            <span class='text-sm font-semibold' style='color: #1f2937'>3.5 h</span>
+                        </div>
+                    `
+                }
+            },
+            {
+                id: 'status-card',
+                name: 'Status Card',
+                description: 'Indicator with state',
+                template: `
+                    <div class='card card-border-left flex items-center space-x-4' style='border-left-color: {{borderColor}}'>
+                        <div class='flex-shrink-0'>
+                            <svg class='icon-xl' style='color: {{iconColor}}' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'>
+                                <path stroke-linecap='round' stroke-linejoin='round' d='{{iconPath}}' />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class='text-sm font-medium' style='color: {{labelColor}}'>{{label}}</p>
+                            <p class='text-xl font-semibold flex items-center' style='color: {{valueColor}}'>
+                                <span class='status-dot' style='background-color: {{statusColor}}'></span> {{value}}
+                            </p>
+                            <p class='text-xs mt-1' style='color: {{subTextColor}}'>{{subText}}</p>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Main System',
+                    value: 'Online',
+                    subText: 'Last check: 2 min ago',
+                    borderColor: '#10b981',
+                    iconColor: '#10b981',
+                    iconPath: 'M13 10V3L4 14h7v7l9-11h-7z',
+                    labelColor: '#6b7280',
+                    valueColor: '#1f2937',
+                    statusColor: '#10b981',
+                    subTextColor: '#9ca3af'
+                }
+            },
+            {
+                id: 'big-number',
+                name: 'Big Number',
+                description: 'Centered card with large value',
+                template: `
+                    <div class='card text-center' style='background-color: {{bgColor}}'>
+                        <p class='text-sm font-medium uppercase tracking-wider mb-2' style='color: {{labelColor}}'>{{label}}</p>
+                        <p class='text-5xl font-extrabold mb-3' style='color: {{valueColor}}'>{{value}}</p>
+                        <div class='text-sm rounded-full px-3 py-1 inline-block' style='background-color: {{badgeBgColor}}'>
+                            <span class='font-semibold' style='color: {{badgeValueColor}}'>{{badgeValue}}</span>
+                            <span style='color: {{badgeTextColor}}'> {{badgeText}}</span>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Total Mileage (Fleet)',
+                    value: '1.2M km',
+                    badgeValue: '+150k km',
+                    badgeText: 'vs Previous Year',
+                    bgColor: '#003057',
+                    labelColor: 'rgba(255, 255, 255, 0.7)',
+                    valueColor: '#ffffff',
+                    badgeBgColor: 'rgba(255, 255, 255, 0.2)',
+                    badgeValueColor: '#86efac',
+                    badgeTextColor: 'rgba(255, 255, 255, 0.6)'
+                }
+            },
+            {
+                id: 'grid-metrics',
+                name: 'Metrics Grid',
+                description: 'Four values in grid',
+                template: `
+                    <div class='card card-border-top' style='border-top-color: {{borderColor}}'>
+                        <p class='text-base font-semibold mb-4' style='color: {{labelColor}}'>{{label}}</p>
+                        <div class='grid-2-cols'>
+                            {{gridItems}}
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Average Consumption',
+                    borderColor: '#6366f1',
+                    labelColor: '#374151',
+                    gridItems: `
+                        <div class='text-sm'>
+                            <p style='color: #6b7280'>Urban</p>
+                            <p class='font-semibold' style='color: #1f2937'>35 L/100km</p>
+                        </div>
+                        <div class='text-sm'>
+                            <p style='color: #6b7280'>Highway</p>
+                            <p class='font-semibold' style='color: #1f2937'>28 L/100km</p>
+                        </div>
+                    `
+                }
+            },
+            {
+                id: 'alert-card',
+                name: 'Alert Card',
+                description: 'Notification with icon',
+                template: `
+                    <div class='card card-border-left rounded-r-lg flex items-center space-x-3 p-4' style='background-color: {{bgColor}}; border-left-color: {{borderColor}}'>
+                        <div class='flex-shrink-0'>
+                            <svg class='icon-md' style='color: {{iconColor}}' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'>
+                                <path stroke-linecap='round' stroke-linejoin='round' d='{{iconPath}}' />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class='text-sm font-semibold' style='color: {{titleColor}}'>{{title}}</p>
+                            <p class='text-xs' style='color: {{messageColor}}'>{{message}}</p>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    title: 'Maintenance Required',
+                    message: 'Truck #RT-45B - Low AdBlue level',
+                    bgColor: '#fef2f2',
+                    borderColor: '#e60013',
+                    iconColor: '#e60013',
+                    iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
+                    titleColor: '#e60013',
+                    messageColor: '#4b5563'
+                }
+            },
+            {
+                id: 'circular-progress',
+                name: 'Circular Progress',
+                description: 'Score with circle',
+                template: `
+                    <div class='card text-center'>
+                        <p class='text-sm font-medium mb-3' style='color: {{labelColor}}'>{{label}}</p>
+                        <div class='circle-container'>
+                            <svg viewBox='0 0 100 100'>
+                                <circle class='circle-bg' cx='50' cy='50' r='40' style='stroke: {{circleBgColor}}' />
+                                <circle class='circle-progress' cx='50' cy='50' r='40' style='stroke: {{circleColor}}; stroke-dashoffset: {{circleOffset}}' />
+                            </svg>
+                            <span class='circle-text' style='color: {{valueColor}}'>{{value}}</span>
+                        </div>
+                        <p class='text-xs' style='color: {{subTextColor}}'>{{subText}}</p>
+                    </div>
+                `,
+                properties: {
+                    label: 'Eco-Driving Score',
+                    value: '75',
+                    subText: 'Fleet average: 72',
+                    labelColor: '#6b7280',
+                    valueColor: '#003057',
+                    subTextColor: '#9ca3af',
+                    circleBgColor: '#e5e7eb',
+                    circleColor: '#003057',
+                    circleOffset: '62.8'
+                }
+            },
+            // New cards from original design - translated to English
+            {
+                id: 'compact-stat',
+                name: 'Compact Statistic',
+                description: 'Minimal statistic display',
+                template: `
+                    <div class='card' style='background-color: {{bgColor}}'>
+                        <div class='flex justify-between'>
+                            <div>
+                                <p class='text-xs font-medium mb-1' style='color: {{labelColor}}'>{{label}}</p>
+                                <p class='text-2xl font-bold' style='color: {{valueColor}}'>{{value}}</p>
+                            </div>
+                            <div style='color: {{iconColor}}'>
+                                <svg class='icon-lg' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                    <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='{{iconPath}}' />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    label: 'Total Orders',
+                    value: '843',
+                    bgColor: '#ffffff',
+                    labelColor: '#6b7280',
+                    valueColor: '#1f2937',
+                    iconColor: '#003057',
+                    iconPath: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
+                }
+            },
+            {
+                id: 'maintenance-alert',
+                name: 'Maintenance Alert',
+                description: 'Critical maintenance notification',
+                template: `
+                    <div class='card' style='background-color: {{bgColor}}'>
+                        <div class='flex justify-between mb-3'>
+                            <p class='text-sm font-medium' style='color: {{titleColor}}'>{{title}}</p>
+                            <span class='text-xs font-medium px-2 py-1 rounded-full' style='background-color: {{badgeBgColor}}; color: {{badgeColor}}'>{{badgeText}}</span>
+                        </div>
+                        <div class='flex space-x-3 items-center'>
+                            <div class='flex-shrink-0 p-2 rounded-full' style='background-color: {{iconBgColor}}'>
+                                <svg class='icon' style='color: {{iconColor}}' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                    <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='{{iconPath}}' />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class='text-sm font-semibold' style='color: {{messageColor}}'>{{message}}</p>
+                                <p class='text-xs' style='color: {{detailColor}}'>{{detail}}</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    title: 'Service Alert',
+                    badgeText: 'High Priority',
+                    message: 'Engine diagnostics required',
+                    detail: 'Vehicle ID: TL-89437 • Due: Today',
+                    bgColor: '#fff4f4',
+                    titleColor: '#1f2937',
+                    badgeBgColor: '#fed7d7',
+                    badgeColor: '#e53e3e',
+                    iconBgColor: '#fed7d7',
+                    iconColor: '#e53e3e',
+                    messageColor: '#1f2937',
+                    detailColor: '#6b7280',
+                    iconPath: 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'
+                }
+            },
+            // New Volvo Group specific KPIs
+            {
+                id: 'fleet-efficiency',
+                name: 'Fleet Efficiency',
+                description: 'Fleet overview',
+                template: `
+                    <div class='card' style='background-color: {{bgColor}}; border: 1px solid {{borderColor}}'>
+                        <div class='flex justify-between items-center mb-4'>
+                            <p class='text-base font-semibold' style='color: {{titleColor}}'>{{title}}</p>
+                            <span class='px-2 py-1 rounded text-xs font-semibold' style='background-color: {{badgeBgColor}}; color: {{badgeColor}}'>
+                                {{badgeText}}
+                            </span>
+                        </div>
+                        
+                        <div class='fleet-stats-grid'>
+                            <div class='fleet-stat-item'>
+                                <p class='fleet-stat-label'>{{stat1Label}}</p>
+                                <p class='fleet-stat-value'>{{stat1Value}}</p>
+                                <div class='fleet-trend trend-down'>
+                                    <svg class='icon' viewBox='0 0 24 24'>
+                                        <path d='M19 14l-7 7m0 0l-7-7m7 7V3' />
+                                    </svg>
+                                    {{stat1Change}}
+                                </div>
+                            </div>
+                            <div class='fleet-stat-item'>
+                                <p class='fleet-stat-label'>{{stat2Label}}</p>
+                                <p class='fleet-stat-value'>{{stat2Value}}</p>
+                                <div class='fleet-trend trend-up'>
+                                    <svg class='icon' viewBox='0 0 24 24'>
+                                        <path d='M5 10l7-7m0 0l7 7m-7-7v18' />
+                                    </svg>
+                                    {{stat2Change}}
+                                </div>
+                            </div>
+                            <div class='fleet-stat-item'>
+                                <p class='fleet-stat-label'>{{stat3Label}}</p>
+                                <p class='fleet-stat-value'>{{stat3Value}}</p>
+                                <div class='fleet-trend trend-up'>
+                                    <svg class='icon' viewBox='0 0 24 24'>
+                                        <path d='M5 10l7-7m0 0l7 7m-7-7v18' />
+                                    </svg>
+                                    {{stat3Change}}
+                                </div>
+                            </div>
+                            <div class='fleet-stat-item'>
+                                <p class='fleet-stat-label'>{{stat4Label}}</p>
+                                <p class='fleet-stat-value'>{{stat4Value}}</p>
+                                <div class='fleet-trend trend-down'>
+                                    <svg class='icon' viewBox='0 0 24 24'>
+                                        <path d='M19 14l-7 7m0 0l-7-7m7 7V3' />
+                                    </svg>
+                                    {{stat4Change}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    title: 'Fleet Efficiency',
+                    badgeText: 'May 2025',
+                    bgColor: '#ffffff',
+                    borderColor: '#e6e8eb',
+                    titleColor: '#003057',
+                    badgeBgColor: 'rgba(0, 48, 87, 0.1)',
+                    badgeColor: '#003057',
+
+                    stat1Label: 'Average Consumption',
+                    stat1Value: '32.5 L/100km',
+                    stat1Change: '-2.3%',
+
+                    stat2Label: 'Availability',
+                    stat2Value: '94.8%',
+                    stat2Change: '+1.2%',
+
+                    stat3Label: 'Utilization Rate',
+                    stat3Value: '87.3%',
+                    stat3Change: '+3.5%',
+
+                    stat4Label: 'Cost/km',
+                    stat4Value: '0.72 €',
+                    stat4Change: '-4.1%'
+                }
+            },
+            {
+                id: 'delivery-performance',
+                name: 'Delivery Performance',
+                description: 'Delivery statistics',
+                template: `
+                    <div class='card' style='background-color: {{bgColor}}; border: 1px solid {{borderColor}}'>
+                        <p class='text-base font-semibold mb-3' style='color: {{titleColor}}'>{{title}}</p>
+                        
+                        <div class='flex justify-between items-end mb-4'>
+                            <div>
+                                <p class='text-sm' style='color: {{labelColor}}'>{{mainLabel}}</p>
+                                <p class='text-3xl font-bold' style='color: {{valueColor}}'>{{mainValue}}</p>
+                            </div>
+                            <p class='text-sm font-medium' style='color: {{targetColor}}'>{{targetText}}</p>
+                        </div>
+                        
+                        <p class='text-sm mb-2' style='color: {{subLabelColor}}'>{{statusLabel}}</p>
+                        
+                        <div class='delivery-status'>
+                            <div class='status-indicator status-on-time'></div>
+                            <div style='color: {{textColor}}'>On Time ({{onTimePercent}})</div>
+                        </div>
+                        
+                        <div class='delivery-status'>
+                            <div class='status-indicator status-delayed'></div>
+                            <div style='color: {{textColor}}'>Delayed ({{delayedPercent}})</div>
+                        </div>
+                        
+                        <div class='delivery-status'>
+                            <div class='status-indicator status-critical'></div>
+                            <div style='color: {{textColor}}'>Critical ({{criticalPercent}})</div>
+                        </div>
+                        
+                        <div class='delivery-bar'>
+                            <div class='delivery-bar-segment segment-on-time'></div>
+                            <div class='delivery-bar-segment segment-delayed'></div>
+                            <div class='delivery-bar-segment segment-critical'></div>
+                        </div>
+                        
+                        <div class='delivery-labels'>
+                            <div class='delivery-label'>{{totalCount}} deliveries</div>
+                            <div class='delivery-label'>Period: {{period}}</div>
+                        </div>
+                    </div>
+                `,
+                properties: {
+                    title: 'Delivery Performance',
+                    bgColor: '#ffffff',
+                    borderColor: '#e6e8eb',
+                    titleColor: '#003057',
+
+                    mainLabel: 'On-time delivery rate',
+                    mainValue: '75%',
+                    valueColor: '#003057',
+                    labelColor: '#6b7280',
+
+                    targetText: 'Target: 85%',
+                    targetColor: '#7c7c7c',
+
+                    statusLabel: 'Status breakdown',
+                    subLabelColor: '#6b7280',
+                    textColor: '#4f4f4f',
+
+                    onTimePercent: '75%',
+                    delayedPercent: '18%',
+                    criticalPercent: '7%',
+
+                    totalCount: '643',
+                    period: 'May 2025'
+                }
+            }
+        ];
+
+        // Current state
+        let currentCard = null;
+        let currentProperties = {};
+        let previewMode = 'mobile';
+        let powerBIMode = false;
+        let powerBIVars = new Set();
+        let powerBIPrefix = 'volvokpi_';
+        let powerBIVarNames = new Map();
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCardList();
+            selectCard(cardTemplates[0]);
+        });
+
+        // Load card list
+        function loadCardList() {
+            const cardList = document.getElementById('cardList');
+            cardList.innerHTML = cardTemplates.map((card, index) => `
+                <div class="card-item ${index === 0 ? 'active' : ''}" onclick="selectCard(cardTemplates[${index}])">
+                    <div class="card-item-title">${card.name}</div>
+                    <div class="card-item-desc">${card.description}</div>
+                </div>
+            `).join('');
+        }
+
+        // Switch preview mode
+        function switchPreviewMode(mode) {
+            previewMode = mode;
+            const preview = document.getElementById('preview-frame');
+            const sizeLabel = document.getElementById('previewSizeLabel');
+            const controlBtns = document.querySelectorAll('.preview-control-btn');
+
+            controlBtns.forEach(btn => btn.classList.remove('active'));
+
+            switch (mode) {
+                case 'mobile':
+                    preview.style.width = '375px';
+                    sizeLabel.textContent = '375px';
+                    preview.className = '';
+                    controlBtns[0].classList.add('active');
+                    break;
+                case 'tablet':
+                    preview.style.width = '480px';
+                    sizeLabel.textContent = '480px';
+                    preview.className = 'preview-frame-tablet';
+                    controlBtns[1].classList.add('active');
+                    break;
+                case 'desktop':
+                    preview.style.width = '600px';
+                    sizeLabel.textContent = '600px';
+                    preview.className = 'preview-frame-desktop';
+                    controlBtns[2].classList.add('active');
+                    break;
+            }
+        }
+
+        // Select card
+        function selectCard(card) {
+            currentCard = card;
+            currentProperties = { ...card.properties };
+
+            // Update active state
+            document.querySelectorAll('.card-item').forEach((item, index) => {
+                item.classList.toggle('active', cardTemplates[index].id === card.id);
+            });
+
+            // Load properties
+            loadProperties();
+
+            // Update preview
+            updatePreview();
+        }
+
+        // Load properties panel
+        function loadProperties() {
+            const propertiesContent = document.getElementById('propertiesContent');
+            propertiesContent.innerHTML = '';
+
+            // Content properties
+            const contentGroup = createPropertyGroup('Content', 'text');
+
+            // Filter only content properties (not colors/styles)
+            const contentProps = Object.entries(currentProperties).filter(([key, value]) =>
+                !key.includes('Color') && !key.includes('Bg') && !key.includes('Icon') &&
+                !key.includes('border') && !key.includes('Offset')
+            );
+
+            contentProps.forEach(([key, value]) => {
+                contentGroup.appendChild(createPropertyRow(key, value, 'text'));
+            });
+
+            propertiesContent.appendChild(contentGroup);
+
+            // Color properties
+            const colorGroup = createPropertyGroup('Colors', 'palette');
+
+            // Filter only color properties
+            const colorProps = Object.entries(currentProperties).filter(([key, value]) =>
+                key.includes('Color') || key.includes('Bg') || key.includes('border')
+            );
+
+            colorProps.forEach(([key, value]) => {
+                colorGroup.appendChild(createPropertyRow(key, value, 'color'));
+            });
+
+            propertiesContent.appendChild(colorGroup);
+
+            // Typography properties
+            const typographyGroup = createPropertyGroup('Typography', 'typography');
+            typographyGroup.innerHTML += `
+                <div class="property-row">
+                    <div class="property-label">Main Font</div>
+                    <div class="font-selector">
+                        <div class="font-option active" onclick="applyFont('Volvo Novum')">Volvo Novum</div>
+                        <div class="font-option" onclick="applyFont('Inter')">Inter</div>
+                        <div class="font-option" onclick="applyFont('Arial')">Arial</div>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Letter Spacing (px)</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="-2" max="10" value="0" step="0.5"
+                            onchange="updateCardStyle('letter-spacing', this.value + 'px')"
+                            oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                        <span class="range-value">0px</span>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Line Height</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="1" max="2" value="1.5" step="0.1"
+                            onchange="updateCardStyle('line-height', this.value)"
+                            oninput="this.nextElementSibling.textContent = this.value">
+                        <span class="range-value">1.5</span>
+                    </div>
+                </div>
+            `;
+            propertiesContent.appendChild(typographyGroup);
+
+            // Animation properties
+            const animationGroup = createPropertyGroup('Animations', 'animation');
+            animationGroup.innerHTML += `
+                <div class="property-row">
+                    <div class="property-label">Border Radius (px)</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="0" max="24" value="12" 
+                            class="property-input" 
+                            onchange="updateCardStyle('border-radius', this.value + 'px')"
+                            oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                        <span class="range-value">12px</span>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Hover Animation</div>
+                    <div class="switch-wrapper">
+                        <div class="switch active" onclick="toggleHoverAnimation(this)">
+                            <div class="switch-toggle"></div>
+                        </div>
+                        <span class="property-label">Enabled</span>
+                    </div                </div>
+                <div class="property-row">
+                    <div class="property-label">Transition Duration (ms)</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="100" max="1000" value="200" 
+                            class="property-input" 
+                            onchange="updateCardStyle('animation-duration', this.value + 'ms')"
+                            oninput="this.nextElementSibling.textContent = this.value + 'ms'">
+                        <span class="range-value">200ms</span>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Hover Elevation (px)</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="0" max="10" value="2" 
+                            class="property-input" 
+                            onchange="updateCardStyle('hover-elevation', this.value)"
+                            oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                        <span class="range-value">2px</span>
+                    </div>
+                </div>
+            `;
+            propertiesContent.appendChild(animationGroup);
+
+            // Power BI properties
+            const powerBIGroup = createPropertyGroup('Power BI Options', 'powerbi');
+            powerBIGroup.innerHTML += `
+                <div class="property-row">
+                    <div class="property-label">Power BI Mode</div>
+                    <div class="switch-wrapper">
+                        <div class="switch" onclick="togglePowerBI(this)">
+                            <div class="switch-toggle"></div>
+                        </div>
+                        <span class="property-label">Disabled</span>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Variable Prefix</div>
+                    <input type="text" class="property-input" value="${powerBIPrefix}" 
+                           onchange="updatePowerBIPrefix(this.value)">
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Power BI Variables</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <button class="btn btn-secondary" style="font-size: 12px; padding: 4px 8px;" onclick="selectAllPowerBIVars(true)">Select All</button>
+                        <button class="btn btn-secondary" style="font-size: 12px; padding: 4px 8px;" onclick="selectAllPowerBIVars(false)">Deselect All</button>
+                    </div>
+                    <div class="powerbi-vars" style="max-height: 300px; overflow-y: auto;">
+                        ${Object.entries(currentProperties).map(([key, value]) => {
+                const varName = powerBIVarNames.get(key) || `${powerBIPrefix}${key}`;
+                return `
+                                <div class="powerbi-var-item" style="display: flex; align-items: center; padding: 8px; background: #f8f9fa; margin-bottom: 4px; border-radius: 4px;">
+                                    <input type="checkbox" id="pbi_${key}" data-var="${key}"
+                                        style="width: 16px; height: 16px; margin-right: 8px;"
+                                        onchange="updatePowerBIVars(this)">
+                                    <label for="pbi_${key}" style="flex: 1; cursor: pointer;">${key}</label>
+                                    <input type="text" class="property-input" style="width: 140px;" 
+                                           value="${varName}"
+                                           onchange="updatePowerBIVarName('${key}', this.value)">
+                                </div>
+                            `;
+            }).join('')}
+                    </div>
+                </div>`;
+            propertiesContent.appendChild(powerBIGroup);
+
+            // Effects
+            const effectsGroup = createPropertyGroup('Effects', 'effects');
+            effectsGroup.innerHTML += `
+                <div class="property-row">
+                    <div class="property-label">Shadow X (px)</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="-20" max="20" value="0"
+                            onchange="updateCardStyle('shadow-x', this.value + 'px')"
+                            oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                        <span class="range-value">0px</span>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Shadow Y (px)</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="-20" max="20" value="2"
+                            onchange="updateCardStyle('shadow-y', this.value + 'px')"
+                            oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                        <span class="range-value">2px</span>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Hover Blur (px)</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="0" max="10" value="0"
+                            onchange="updateCardStyle('hover-blur', this.value + 'px')"
+                            oninput="this.nextElementSibling.textContent = this.value + 'px'">
+                        <span class="range-value">0px</span>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Hover Rotation (deg)</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="-5" max="5" value="0" step="0.5"
+                            onchange="updateCardStyle('hover-rotate', this.value + 'deg')"
+                            oninput="this.nextElementSibling.textContent = this.value + '°'">
+                        <span class="range-value">0°</span>
+                    </div>
+                </div>
+                <div class="property-row">
+                    <div class="property-label">Hover Scale</div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="0.9" max="1.1" step="0.01" value="1"
+                            onchange="updateCardStyle('hover-scale', this.value)"
+                            oninput="this.nextElementSibling.textContent = this.value">
+                        <span class="range-value">1</span>
+                    </div>
+                </div>
+            `;
+            propertiesContent.appendChild(effectsGroup);
+        }
+
+        // Create property group
+        function createPropertyGroup(title, icon) {
+            const group = document.createElement('div');
+            group.className = 'property-group animate-in';
+            group.innerHTML = `
+                <div class="property-group-title">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        ${getIcon(icon)}
+                    </svg>
+                    ${title}
+                </div>
+            `;
+            return group;
+        }
+
+        // Create property row
+        function createPropertyRow(key, value, type) {
+            const row = document.createElement('div');
+            row.className = 'property-row';
+
+            const label = key.replace(/([A-Z])/g, ' $1')
+                .replace(/^./, str => str.toUpperCase());
+
+            if (type === 'color') {
+                row.innerHTML = `
+                    <div class="property-label">${label}</div>
+                    <div class="color-input-wrapper">
+                        <div class="color-preview" data-color="${key}" style="background-color: ${value}">
+                            <input type="color" value="${value}" onchange="updateProperty('${key}', this.value)">
+                        </div>
+                        <input type="text" class="property-input" value="${value}" 
+                            onchange="updateProperty('${key}', this.value)"
+                            oninput="updateProperty('${key}', this.value)">
+                    </div>
+                `;
+            } else {
+                row.innerHTML = `
+                    <div class="property-label">${label}</div>
+                    <input type="text" class="property-input" value="${value}" 
+                        onchange="updateProperty('${key}', this.value)"
+                        oninput="updateProperty('${key}', this.value)">
+                `;
+            }
+
+            return row;
+        }
+
+        // Update property
+        function updateProperty(key, value) {
+            currentProperties[key] = value;
+
+            // Update color preview if it exists
+            const colorPreview = document.querySelector(`[data-color="${key}"]`);
+            if (colorPreview) {
+                colorPreview.style.backgroundColor = value;
+            }
+
+            updatePreview();
+            updateGeneratedCode();
+        }
+
+        // Update preview
+        function updatePreview() {
+            const preview = document.getElementById('preview-frame');
+            let html = currentCard.template;
+
+            Object.entries(currentProperties).forEach(([key, value]) => {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                if (powerBIMode && powerBIVars.has(key)) {
+                    const varName = powerBIVarNames.get(key) || `${powerBIPrefix}${key}`;
+                    // Utiliser directement le format PowerBI sans encodage HTML
+                    html = html.replace(regex, `"&[${varName}]&"`);
+                } else {
+                    html = html.replace(regex, value);
+                }
+            });
+
+            // Add base styles with CSS variables
+            const baseStyles = `
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { font-family: 'Volvo Novum', 'Inter', sans-serif; }
+                    :root {
+                        --card-border-radius: 0.75rem;
+                        --card-animation-duration: 0.2s;
+                        --card-hover-elevation: 2;
+                    }
+                    ${getCardStyles()}
+                </style>
+            `;
+
+            preview.innerHTML = baseStyles + html;
+            updateGeneratedCode();
+        }
+
+        // Get card styles
+        function getCardStyles() {
+            return `
+                .card {
+                    background-color: white;
+                    border-radius: var(--card-border-radius, 0.75rem);
+                    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03);
+                    padding: 1.5rem;
+                    transition: all var(--card-animation-duration, 0.2s);
+                    filter: drop-shadow(var(--card-shadow-x, 0) var(--card-shadow-y, 2px) var(--card-shadow-blur, 4px) var(--card-shadow-color, rgba(0,0,0,0.1)));
+                    backdrop-filter: blur(var(--card-hover-blur, 0));
+                    transform: rotate(var(--card-hover-rotate, 0)) scale(var(--card-hover-scale, 1));
+                    letter-spacing: var(--card-letter-spacing, normal);
+                    line-height: var(--card-line-height, 1.5);
+                }
+                .card:hover {
+                    transform: translateY(calc(var(--card-hover-elevation, 2) * -1px));
+                    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.06);
+                }
+                .card-border-top { border-top: 4px solid; }
+                .card-border-left { border-left: 4px solid; }
+                .text-sm { font-size: 0.875rem; }
+                .text-xs { font-size: 0.75rem; }
+                .text-base { font-size: 1rem; }
+                .text-xl { font-size: 1.25rem; }
+                .text-2xl { font-size: 1.5rem; }
+                .text-3xl { font-size: 1.875rem; }
+                .text-4xl { font-size: 2.25rem; }
+                .text-5xl { font-size: 3rem; }
+                .font-medium { font-weight: 500; }
+                .font-semibold { font-weight: 600; }
+                .font-bold { font-weight: 700; }
+                .font-extrabold { font-weight: 800; }
+                .mb-0 { margin-bottom: 0; }
+                .mb-1 { margin-bottom: 0.25rem; }
+                .mb-2 { margin-bottom: 0.5rem; }
+                .mb-3 { margin-bottom: 0.75rem; }
+                .mb-4 { margin-bottom: 1rem; }
+                .mt-1 { margin-top: 0.25rem; }
+                .mt-3 { margin-top: 0.75rem; }
+                .mt-4 { margin-top: 1rem; }
+                .mr-1 { margin-right: 0.25rem; }
+                .mr-2 { margin-right: 0.5rem; }
+                .flex { display: flex; }
+                .items-center { align-items: center; }
+                .items-start { align-items: flex-start; }
+                .justify-between { justify-content: space-between; }
+                .justify-center { justify-content: center; }
+                .space-x-3 > * + * { margin-left: 0.75rem; }
+                .space-x-4 > * + * { margin-left: 1rem; }
+                .space-y-3 > * + * { margin-top: 0.75rem; }
+                .flex-shrink-0 { flex-shrink: 0; }
+                .grid-2-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+                .text-center { text-align: center; }
+                .text-right { text-align: right; }
+                .inline-block { display: inline-block; }
+                .uppercase { text-transform: uppercase; }
+                .tracking-wider { letter-spacing: 0.05em; }
+                .rounded { border-radius: 0.25rem; }
+                .rounded-full { border-radius: 9999px; }
+                .rounded-r-lg { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
+                .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+                .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+                .py-0-5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+                .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+                .p-3 { padding: 0.75rem; }
+                .p-4 { padding: 1rem; }
+                .border-r { border-right: 1px solid; }
+                .border-gray-200 { border-right-color: #e5e7eb; }
+                .icon { width: 1rem; height: 1rem; vertical-align: middle; }
+                .icon-md { width: 1.5rem; height: 1.5rem; }
+                .icon-lg { width: 2rem; height: 2rem; }
+                .icon-xl { width: 2.5rem; height: 2.5rem; }
+                .progress-bar-bg { background-color: #e5e7eb; border-radius: 9999px; overflow: hidden; height: 8px; width: 100%; margin-bottom: 0.25rem; }
+                .progress-bar-fill { height: 100%; border-radius: 9999px; }
+                .mini-bar-chart { display: flex; align-items: flex-end; height: 40px; gap: 3px; }
+                .mini-bar { background-color: #a9a9a9; width: 6px; border-radius: 2px 2px 0 0; }
+                .bar-95 { height: 95%; }
+                .bar-98 { height: 98%; }
+                .bar-96 { height: 96%; }
+                .bar-97 { height: 97%; }
+                .bar-94 { height: 94%; }
+                .bar-92 { height: 92%; }
+                .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+                .circle-container { position: relative; width: 6rem; height: 6rem; margin: 0 auto 0.5rem auto; }
+                .circle-bg { fill: none; stroke: #e5e7eb; stroke-width: 10; }
+                .circle-progress { fill: none; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 251.2; transform: rotate(-90deg); transform-origin: center; }
+                .circle-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; font-weight: 700; }
+                
+                /* Fleet Efficiency Styles */
+                .fleet-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 10px;
+                }
+                .fleet-stat-item {
+                    padding: 12px;
+                    background: rgba(0, 48, 87, 0.05);
+                    border-radius: 6px;
+                }
+                .fleet-stat-label {
+                    font-size: 0.75rem;
+                    color: #6b7280;
+                    margin-bottom: 4px;
+                }
+                .fleet-stat-value {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    color: #003057;
+                }
+                .fleet-trend {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    font-size: 0.75rem;
+                    margin-top: 4px;
+                }
+                .trend-up {
+                    color: #22c55e;
+                }
+                .trend-down {
+                    color: #e60013;
+                }
+                
+                /* Delivery Status Styles */
+                .delivery-status {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 10px;
+                }
+                .status-indicator {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                }
+                .status-on-time {
+                    background-color: #22c55e;
+                }
+                .status-delayed {
+                    background-color: #f59e0b;
+                }
+                .status-critical {
+                    background-color: #e60013;
+                }
+                .delivery-bar {
+                    height: 30px;
+                    border-radius: 6px;
+                    background: #f2f3f5;
+                    overflow: hidden;
+                    position: relative;
+                }
+                .delivery-bar-segment {
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                }
+                .segment-on-time {
+                    background-color: #22c55e;
+                    left: 0;
+                    width: 75%;
+                }
+                .segment-delayed {
+                    background-color: #f59e0b;
+                    left: 75%;
+                    width: 18%;
+                }
+                .segment-critical {
+                    background-color: #e60013;
+                    left: 93%;
+                    width: 7%;
+                }
+                .delivery-labels {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 6px;
+                }
+                .delivery-label {
+                    font-size: 0.75rem;
+                    color: #6b7280;
+                }
+            `;
+        }
+
+        // Update generated code
+        function updateGeneratedCode() {
+            const code = document.getElementById('generatedCode');
+            let html = currentCard.template;
+            let styles = getCardStyles();
+
+            // Toujours utiliser les valeurs directes quand PowerBI est désactivé
+            if (!powerBIMode) {
+                Object.entries(currentProperties).forEach(([key, value]) => {
+                    const regex = new RegExp(`{{${key}}}`, 'g');
+                    html = html.replace(regex, value);
+                });
+            } else {
+                // Utiliser le format PowerBI uniquement pour les variables cochées
+                Object.entries(currentProperties).forEach(([key, value]) => {
+                    const regex = new RegExp(`{{${key}}}`, 'g');
+                    html = html.replace(regex, powerBIVars.has(key) ? `"&[${key}]&"` : value);
+                });
+            }
+
+            // Format code
+            const formattedCode = `
+<!-- Volvo Group KPI Designer - ${currentCard.name} -->
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Volvo Novum', sans-serif;
+}
+${styles}
+</style>
+${html.trim()}`;
+
+            code.textContent = formattedCode;
+        }
+
+        // Toggle functions
+        function toggleHoverAnimation(element) {
+            element.classList.toggle('active');
+            element.nextElementSibling.textContent = element.classList.contains('active') ? 'Enabled' : 'Disabled';
+
+            const preview = document.getElementById('preview-frame');
+            if (!element.classList.contains('active')) {
+                preview.style.setProperty('--card-hover-elevation', '0');
+            } else {
+                preview.style.setProperty('--card-hover-elevation', '2');
+            }
+        }
+
+        function togglePowerBI(element) {
+            powerBIMode = !powerBIMode;
+            element.classList.toggle('active');
+            element.nextElementSibling.textContent = powerBIMode ? 'Enabled' : 'Disabled';
+
+            // Reset checkboxes when disabling Power BI mode
+            if (!powerBIMode) {
+                powerBIVars.clear();
+                document.querySelectorAll('.powerbi-var-item input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                });
+            }
+
+            updatePreview();
+        }
+
+        function toggleCodeOutput() {
+            document.getElementById('codeOutput').classList.toggle('open');
+        }
+
+        // Copy code
+        function copyCode() {
+            const code = document.getElementById('generatedCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                btn.style.background = 'var(--success-green)';
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.style.background = 'var(--volvo-blue)';
+                }, 2000);
+            });
+        }
+
+        // Switch tab
+        function switchTab(tab) {
+            powerBIMode = tab === 'powerbi';
+            updatePreview();
+        }
+
+        // Get icon SVG
+        function getIcon(type) {
+            const icons = {
+                text: 'M3 5h12M3 12h18m-9 7h9',
+                palette: 'M12 6.5a5.5 5.5 0 1 1 7.5 8.5L12 22l-7.5-7.5A5.5 5.5 0 1 1 12 6.5',
+                animation: 'M13 10V3L4 14h7v7l9-11h-7z',
+                powerbi: 'M3 3h18v18H3zM12 8v8m-4-4h8',
+                effects: 'M9.5 16c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm7-13h-14c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z',
+                typography: 'M13 6v15h-2v-15h-5v-2h12v2h-5z',
+                layout: 'M4 4h16v16h-16v-16zm2 2v12h12v-12h-12z'
+            };
+            return `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${icons[type] || icons.text}" />`;
+        }
+
+        // Save configuration
+        function saveConfiguration() {
+            const config = {
+                card: currentCard.id,
+                properties: currentProperties,
+                animations: {
+                    hover: document.querySelector('.switch.active') ? true : false,
+                    duration: document.querySelector('input[type="range"]').value,
+                    elevation: document.querySelectorAll('input[type="range"]')[1].value
+                },
+                styles: getCardStyles()
+            };
+
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `volvo-kpi-${currentCard.id}-config.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Update card style
+        function updateCardStyle(property, value) {
+            const preview = document.getElementById('preview-frame');
+            preview.style.setProperty(`--card-${property}`, value);
+            updateGeneratedCode();
+        }
+
+        // Update Power BI prefix
+        function updatePowerBIPrefix(value) {
+            powerBIPrefix = value;
+            // Mettre à jour tous les noms par défaut
+            Object.keys(currentProperties).forEach(key => {
+                if (!powerBIVarNames.has(key)) {
+                    powerBIVarNames.set(key, `${value}${key}`);
+                }
+            });
+            updatePreview();
+        }
+
+        // Update Power BI variables
+        function updatePowerBIVars(checkbox) {
+            const varName = checkbox.dataset.var;
+            if (checkbox.checked) {
+                powerBIVars.add(varName);
+            } else {
+                powerBIVars.delete(varName);
+            }
+            updatePreview();
+        }
+
+        // Ajouter nouvelle fonction pour mettre à jour les noms de variables
+        function updatePowerBIVarName(key, newName) {
+            powerBIVarNames.set(key, newName);
+            updatePreview();
+        }
+
+        // Apply color token
+        function applyColorToken(name, value) {
+            // Apply the color to the component based on the token
+            switch (name) {
+                case 'primary':
+                    updateProperty('borderColor', value);
+                    if (currentProperties.hasOwnProperty('titleColor')) {
+                        updateProperty('titleColor', value);
+                    }
+                    break;
+                case 'secondary':
+                    if (currentProperties.hasOwnProperty('progressColor')) {
+                        updateProperty('progressColor', value);
+                    }
+                    if (currentProperties.hasOwnProperty('iconColor')) {
+                        updateProperty('iconColor', value);
+                    }
+                    break;
+                case 'accent':
+                    if (currentProperties.hasOwnProperty('trendColor')) {
+                        updateProperty('trendColor', value);
+                    }
+                    if (currentProperties.hasOwnProperty('metric1LabelColor')) {
+                        updateProperty('metric1LabelColor', value);
+                    }
+                    break;
+                case 'neutral':
+                    if (currentProperties.hasOwnProperty('labelColor')) {
+                        updateProperty('labelColor', value);
+                    }
+                    if (currentProperties.hasOwnProperty('subTextColor')) {
+                        updateProperty('subTextColor', value);
+                    }
+                    break;
+            }
+        }
+
+        // Apply theme
+        function applyTheme(themeName) {
+            switch (themeName) {
+                case 'volvo':
+                    // Volvo Corporate Theme
+                    updateProperty('borderColor', '#003057');
+
+                    if (currentProperties.hasOwnProperty('bgColor')) {
+                        updateProperty('bgColor', '#ffffff');
+                    }
+
+                    if (currentProperties.hasOwnProperty('valueColor')) {
+                        updateProperty('valueColor', '#003057');
+                    }
+
+                    if (currentProperties.hasOwnProperty('progressColor')) {
+                        updateProperty('progressColor', '#e60013');
+                    }
+
+                    if (currentProperties.hasOwnProperty('iconColor')) {
+                        updateProperty('iconColor', '#ffffff');
+                    }
+
+                    if (currentProperties.hasOwnProperty('iconBgColor')) {
+                        updateProperty('iconBgColor', '#003057');
+                    }
+
+                    updateCardStyle('border-radius', '8px');
+                    updateCardStyle('hover-elevation', '4px');
+                    break;
+
+                case 'logistics':
+                    // Logistics Theme
+                    updateProperty('borderColor', '#1c6bba');
+
+                    if (currentProperties.hasOwnProperty('bgColor')) {
+                        updateProperty('bgColor', '#f8f9fa');
+                    }
+
+                    if (currentProperties.hasOwnProperty('valueColor')) {
+                        updateProperty('valueColor', '#1c6bba');
+                    }
+
+                    if (currentProperties.hasOwnProperty('progressColor')) {
+                        updateProperty('progressColor', '#7c7c7c');
+                    }
+
+                    if (currentProperties.hasOwnProperty('iconColor')) {
+                        updateProperty('iconColor', '#ffffff');
+                    }
+
+                    if (currentProperties.hasOwnProperty('iconBgColor')) {
+                        updateProperty('iconBgColor', '#1c6bba');
+                    }
+
+                    updateCardStyle('border-radius', '12px');
+                    updateCardStyle('hover-elevation', '3px');
+                    break;
+
+                case 'data':
+                    // Data Viz Theme
+                    updateProperty('borderColor', '#003057');
+
+                    if (currentProperties.hasOwnProperty('bgColor')) {
+                        updateProperty('bgColor', 'linear-gradient(135deg, #f8f9fa, #e8eaed)');
+                    }
+
+                    if (currentProperties.hasOwnProperty('valueColor')) {
+                        updateProperty('valueColor', '#003057');
+                    }
+
+                    if (currentProperties.hasOwnProperty('progressColor')) {
+                        updateProperty('progressColor', 'linear-gradient(90deg, #003057, #1c6bba)');
+                    }
+
+                    if (currentProperties.hasOwnProperty('iconColor')) {
+                        updateProperty('iconColor', '#ffffff');
+                    }
+
+                    if (currentProperties.hasOwnProperty('iconBgColor')) {
+                        updateProperty('iconBgColor', 'linear-gradient(135deg, #003057, #1c6bba)');
+                    }
+
+                    updateCardStyle('border-radius', '16px');
+                    updateCardStyle('hover-elevation', '6px');
+                    updateCardStyle('shadow-blur', '8px');
+                    break;
+            }
+
+            updatePreview();
+        }
+
+        // Apply font
+        function applyFont(fontName) {
+            document.querySelectorAll('.font-option').forEach(option => {
+                option.classList.toggle('active', option.textContent === fontName);
+            });
+
+            const preview = document.getElementById('preview-frame');
+
+            // Update preview element's style
+            preview.style.fontFamily = `'${fontName}', sans-serif`;
+
+            // Update the :root variable for the exported code
+            document.documentElement.style.setProperty('--card-font-family', `'${fontName}', sans-serif`);
+
+            // Also apply to any existing cards in the preview
+            const cards = preview.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.fontFamily = `'${fontName}', sans-serif`;
+            });
+
+            updateGeneratedCode();
+        }
+        // Apply template
+        function applyTemplate(templateName) {
+            switch (templateName) {
+                case 'dashboard':
+                    // Apply dashboard template settings
+                    updateCardStyle('border-radius', '8px');
+                    updateCardStyle('shadow-y', '2px');
+                    updateCardStyle('shadow-blur', '4px');
+                    updateCardStyle('hover-elevation', '3px');
+
+                    if (currentCard.id === 'fleet-efficiency' || currentCard.id === 'delivery-performance') {
+                        // Apply specific styles for these KPIs
+                        updateProperty('bgColor', '#ffffff');
+                        updateProperty('borderColor', '#e6e8eb');
+                    }
+                    break;
+
+                case 'spotlight':
+                    // Apply spotlight template settings
+                    updateCardStyle('border-radius', '16px');
+                    updateCardStyle('shadow-y', '6px');
+                    updateCardStyle('shadow-blur', '12px');
+                    updateCardStyle('hover-elevation', '8px');
+                    updateCardStyle('hover-scale', '1.02');
+
+                    if (currentCard.id === 'fleet-efficiency' || currentCard.id === 'delivery-performance') {
+                        // Apply specific styles for these KPIs
+                        updateProperty('bgColor', '#ffffff');
+                        updateProperty('borderColor', '#003057');
+                    }
+                    break;
+            }
+
+            updatePreview();
+        }
+
+        // Export format
+        function exportFormat(format) {
+            const preview = document.getElementById('preview-frame');
+            let exportContent = '';
+
+            // Get spacing values
+            const padding = document.getElementById('exportPadding').value || 0;
+            const margin = document.getElementById('exportMargin').value || 0;
+
+            // Get background setting
+            const hasTransparentBg = document.querySelector('.switch-wrapper .switch').classList.contains('active');
+            const bgStyle = hasTransparentBg ? 'background: none;' : '';
+
+            // Get current animation and effect values from the preview element
+            const previewStyles = window.getComputedStyle(preview);
+            const animationStyles = `
+                --card-border-radius: ${preview.style.getPropertyValue('--card-border-radius') || '12px'};
+                --card-animation-duration: ${preview.style.getPropertyValue('--card-animation-duration') || '200ms'};
+                --card-hover-elevation: ${preview.style.getPropertyValue('--card-hover-elevation') || '2'};
+                --card-shadow-x: ${preview.style.getPropertyValue('--card-shadow-x') || '0'};
+                --card-shadow-y: ${preview.style.getPropertyValue('--card-shadow-y') || '2px'};
+                --card-shadow-blur: ${preview.style.getPropertyValue('--card-shadow-blur') || '4px'};
+                --card-shadow-color: ${preview.style.getPropertyValue('--card-shadow-color') || 'rgba(0,0,0,0.1)'};
+                --card-hover-blur: ${preview.style.getPropertyValue('--card-hover-blur') || '0'};
+                --card-hover-rotate: ${preview.style.getPropertyValue('--card-hover-rotate') || '0'};
+                --card-hover-scale: ${preview.style.getPropertyValue('--card-hover-scale') || '1'};
+                --card-letter-spacing: ${preview.style.getPropertyValue('--card-letter-spacing') || 'normal'};
+                --card-line-height: ${preview.style.getPropertyValue('--card-line-height') || '1.5'};
+            `;
+
+            // Add container div with spacing
+            const containerStyle = `padding: ${padding}px; margin: ${margin}px;${bgStyle}`;
+            const containerStart = `<div style="${containerStyle}">`;
+            const containerEnd = `</div>`;
+
+            // Get the HTML content from the preview
+            let htmlContent = currentCard.template;
+
+            // Replace template variables with actual values
+            Object.entries(currentProperties).forEach(([key, value]) => {
+                const regex = new RegExp(`{{${key}}}`, 'g');
+                if (format === 'powerbi' && powerBIMode && powerBIVars.has(key)) {
+                    const varName = powerBIVarNames.get(key) || `${powerBIPrefix}${key}`;
+                    htmlContent = htmlContent.replace(regex, `"&[${varName}]&"`);
+                } else {
+                    htmlContent = htmlContent.replace(regex, value);
+                }
+            });
+
+            // Change all double quotes to single quotes in HTML attributes
+            htmlContent = htmlContent.replace(/="([^"]*)"/g, "='$1'");
+
+            // Wrap the content with the container
+            exportContent = `
+<!-- Volvo Group KPI Designer - ${currentCard.name} -->
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+<link href='https://fonts.googleapis.com/css2?family=Volvo+Novum:wght@300;400;500;600;700&display=swap' rel='stylesheet'>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Volvo Novum', sans-serif;
+}
+:root {
+    ${animationStyles}
+}
+${getCardStyles()}
+</style>
+${containerStart}
+${htmlContent}
+${containerEnd}`.trim();
+            // Replace all double quotes with single quotes
+            exportContent = exportContent.replace(/"/g, "'");
+
+            // Pour PowerBI format, on utilise le format exact "&[nomVariable]&" sans encodage HTML
+            if (format === 'powerbi') {
+                Array.from(powerBIVars).forEach(varName => {
+                    const variableName = powerBIVarNames.get(varName) || `${powerBIPrefix}${varName}`;
+                    const regex = new RegExp(`'&(?:amp;)?${varName}&'`, 'g');
+                    exportContent = exportContent.replace(regex, `"&[${variableName}]&"`);
+                });
+
+                // Nettoyer tous les &amp; restants en &
+                exportContent = exportContent.replace(/&amp;/g, '&');
+                exportContent = exportContent.replace(/&quot;/g, '"');
+
+                // S'assurer que les guillemets simples sont remplacés par des doubles pour les variables PowerBI
+                exportContent = exportContent.replace(/'&\[(.*?)\]&'/g, '"&[$1]&"');
+            }
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(exportContent)
+                .then(() => {
+                    const exportOptions = document.querySelectorAll('.export-option');
+                    const clickedOption = Array.from(exportOptions)
+                        .find(opt => opt.textContent.toLowerCase().includes(format));
+
+                    if (clickedOption) {
+                        const originalBackground = clickedOption.style.background;
+                        clickedOption.style.background = 'var(--success-green)';
+                        clickedOption.style.color = 'white';
+
+                        setTimeout(() => {
+                            clickedOption.style.background = originalBackground;
+                            clickedOption.style.color = 'inherit';
+                        }, 2000);
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    alert('Failed to copy to clipboard');
+                });
+        }
+
+        // Add this new function for selecting/deselecting all Power BI variables
+        function selectAllPowerBIVars(select) {
+            document.querySelectorAll('.powerbi-var-item input[type="checkbox"]').forEach(cb => {
+                cb.checked = select;
+                updatePowerBIVars(cb);
+            });
+            updatePreview();
+        }
+
+        // Add this new function to toggle container background
+        function toggleContainerBackground(element) {
+            element.classList.toggle('active');
+            const preview = document.getElementById('preview-frame');
+            if (element.classList.contains('active')) {
+                preview.style.background = 'none';
+                element.nextElementSibling.textContent = 'Transparent Background';
+            } else {
+                preview.style.background = 'white';
+                element.nextElementSibling.textContent = 'White Background';
+            }
+            updatePreview();
+        }
+    </script>
+    <!-- Code injected by live-server -->
+    <script>
+        // <![CDATA[  <-- For SVG support
+        if ('WebSocket' in window) {
+            (function () {
+                function refreshCSS() {
+                    var sheets = [].slice.call(document.getElementsByTagName("link"));
+                    var head = document.getElementsByTagName("head")[0];
+                    for (var i = 0; i < sheets.length; ++i) {
+                        var elem = sheets[i];
+                        var parent = elem.parentElement || head;
+                        parent.removeChild(elem);
+                        var rel = elem.rel;
+                        if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                            var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                            elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                        }
+                        parent.appendChild(elem);
+                    }
+                }
+                var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+                var address = protocol + window.location.host + window.location.pathname + '/ws';
+                var socket = new WebSocket(address);
+                socket.onmessage = function (msg) {
+                    if (msg.data == 'reload') window.location.reload();
+                    else if (msg.data == 'refreshcss') refreshCSS();
+                };
+                if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+                    console.log('Live reload enabled.');
+                    sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+                }
+            })();
+        }
+        else {
+            console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+        }
+        // ]]>
+    </script>
+
+</body>
+
+</html>
