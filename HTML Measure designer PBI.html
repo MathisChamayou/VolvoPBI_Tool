@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volvo Group PBI HTML Measure designer</title>
+    <title>BNP PBI HTML Measure designer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Volvo+Novum:wght@300;400;500;600;700&amp;display=swap"
-        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,22 +13,22 @@
             box-sizing: border-box;
         }
 
-        /* Volvo Group Color Variables */
+        /* BNP Color Variables */
         :root {
-            --volvo-blue: #003057;
-            --volvo-light-blue: #1c6bba;
-            --volvo-red: #e60013;
-            --volvo-gray: #7c7c7c;
-            --volvo-light-gray: #f2f3f5;
-            --volvo-dark-gray: #4f4f4f;
+            --BNP-blue: #003057;
+            --BNP-light-blue: #1c6bba;
+            --BNP-red: #e60013;
+            --BNP-gray: #7c7c7c;
+            --BNP-light-gray: #f2f3f5;
+            --BNP-dark-gray: #4f4f4f;
 
             /* Theme variables */
             --editor-bg: #ffffff;
             --panel-bg: #f8f9fa;
             --panel-border: #e6e8eb;
-            --accent-color: var(--volvo-blue);
-            --accent-secondary: var(--volvo-light-blue);
-            --accent-highlight: var(--volvo-red);
+            --accent-color: var(--BNP-blue);
+            --accent-secondary: var(--BNP-light-blue);
+            --accent-highlight: var(--BNP-red);
             --text-primary: #333333;
             --text-secondary: #666666;
             --input-bg: #ffffff;
@@ -44,7 +42,7 @@
         }
 
         body {
-            font-family: 'Volvo Novum', 'Inter', sans-serif;
+            font-family: 'BNP Novum', 'Inter', sans-serif;
             background: var(--editor-bg);
             color: var(--text-primary);
             height: 100vh;
@@ -78,7 +76,7 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 600;
-            color: var(--volvo-blue);
+            color: var(--BNP-blue);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -112,13 +110,13 @@
         }
 
         .btn-primary {
-            background: var(--volvo-blue);
+            background: var(--BNP-blue);
             color: white;
             box-shadow: var(--shadow-sm);
         }
 
         .btn-primary:hover {
-            background: var(--volvo-light-blue);
+            background: var(--BNP-light-blue);
             transform: translateY(-1px);
             box-shadow: var(--shadow-md);
         }
@@ -130,8 +128,8 @@
         }
 
         .btn-secondary:hover {
-            background: var(--volvo-light-gray);
-            border-color: var(--volvo-blue);
+            background: var(--BNP-light-gray);
+            border-color: var(--BNP-blue);
         }
 
         /* Left Panel - Card Selector */
@@ -172,14 +170,14 @@
         }
 
         .card-item:hover {
-            border-color: var(--volvo-light-blue);
+            border-color: var(--BNP-light-blue);
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
 
         .card-item.active {
             background: rgba(0, 48, 87, 0.03);
-            border-color: var(--volvo-blue);
+            border-color: var(--BNP-blue);
             box-shadow: 0 0 0 1px rgba(0, 48, 87, 0.2);
         }
 
@@ -187,7 +185,7 @@
             font-weight: 600;
             font-size: 0.938rem;
             margin-bottom: 6px;
-            color: var(--volvo-blue);
+            color: var(--BNP-blue);
         }
 
         .card-item-desc {
@@ -227,7 +225,7 @@
         }
 
         .preview-control-btn.active {
-            background: var(--volvo-blue);
+            background: var(--BNP-blue);
             color: white;
         }
 
@@ -282,7 +280,7 @@
             font-weight: 600;
             font-size: 0.938rem;
             margin-bottom: 18px;
-            color: var(--volvo-blue);
+            color: var(--BNP-blue);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -308,12 +306,12 @@
             color: var(--text-primary);
             font-size: 0.875rem;
             transition: all 0.2s;
-            font-family: 'Volvo Novum', sans-serif;
+            font-family: 'BNP Novum', sans-serif;
         }
 
         .property-input:focus {
             outline: none;
-            border-color: var(--volvo-light-blue);
+            border-color: var(--BNP-light-blue);
             box-shadow: 0 0 0 3px rgba(28, 107, 186, 0.1);
         }
 
@@ -358,7 +356,7 @@
         }
 
         .switch.active {
-            background: var(--volvo-blue);
+            background: var(--BNP-blue);
         }
 
         .switch-toggle {
@@ -431,7 +429,7 @@
             top: 12px;
             right: 12px;
             padding: 6px 12px;
-            background: var(--volvo-blue);
+            background: var(--BNP-blue);
             color: white;
             border: none;
             border-radius: 4px;
@@ -466,7 +464,7 @@
         }
 
         .tab.active {
-            background: var(--volvo-blue);
+            background: var(--BNP-blue);
             color: white;
         }
 
@@ -557,7 +555,7 @@
             -webkit-appearance: none;
             width: 18px;
             height: 18px;
-            background: var(--volvo-blue);
+            background: var(--BNP-blue);
             border-radius: 50%;
             cursor: pointer;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -566,7 +564,7 @@
         input[type="range"]::-moz-range-thumb {
             width: 18px;
             height: 18px;
-            background: var(--volvo-blue);
+            background: var(--BNP-blue);
             border-radius: 50%;
             cursor: pointer;
             border: none;
@@ -578,7 +576,7 @@
             min-width: 44px;
             text-align: right;
             font-size: 0.875rem;
-            color: var(--volvo-blue);
+            color: var(--BNP-blue);
             font-weight: 500;
         }
 
@@ -642,7 +640,7 @@
 
         .design-token:hover {
             transform: translateY(-2px);
-            border-color: var(--volvo-blue);
+            border-color: var(--BNP-blue);
             box-shadow: var(--shadow-sm);
         }
 
@@ -678,7 +676,7 @@
 
         .theme-item:hover {
             transform: translateY(-2px);
-            border-color: var(--volvo-light-blue);
+            border-color: var(--BNP-light-blue);
             box-shadow: var(--shadow-sm);
         }
 
@@ -719,7 +717,7 @@
 
         .template-item:hover {
             transform: translateY(-2px);
-            border-color: var(--volvo-light-blue);
+            border-color: var(--BNP-light-blue);
             box-shadow: var(--shadow-sm);
         }
 
@@ -770,7 +768,7 @@
         }
 
         .export-option:hover {
-            border-color: var(--volvo-light-blue);
+            border-color: var(--BNP-light-blue);
             transform: translateY(-2px);
             box-shadow: var(--shadow-sm);
         }
@@ -778,7 +776,7 @@
         .export-icon {
             font-size: 24px;
             margin-bottom: 8px;
-            color: var(--volvo-blue);
+            color: var(--BNP-blue);
         }
 
         .export-name {
@@ -804,13 +802,13 @@
         }
 
         .font-option:hover {
-            border-color: var(--volvo-light-blue);
+            border-color: var(--BNP-light-blue);
             transform: translateY(-2px);
         }
 
         .font-option.active {
             background: rgba(0, 48, 87, 0.05);
-            border-color: var(--volvo-blue);
+            border-color: var(--BNP-blue);
         }
 
         /* Fleet Styles */
@@ -835,7 +833,7 @@
         .fleet-stat-value {
             font-size: 1.25rem;
             font-weight: 600;
-            color: var(--volvo-blue);
+            color: var(--BNP-blue);
         }
 
         .fleet-trend {
@@ -850,7 +848,7 @@
         }
 
         .trend-down {
-            color: var(--volvo-red);
+            color: var(--BNP-red);
         }
 
         /* Delivery Status */
@@ -876,7 +874,7 @@
         }
 
         .status-critical {
-            background-color: var(--volvo-red);
+            background-color: var(--BNP-red);
         }
 
         .delivery-bar {
@@ -906,7 +904,7 @@
         }
 
         .segment-critical {
-            background-color: var(--volvo-red);
+            background-color: var(--BNP-red);
             left: 93%;
             width: 7%;
         }
@@ -953,7 +951,7 @@
                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7zm0 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z">
                 </path>
             </svg> -->
-            <img src="Volvo-Logo-2020-present.png" alt="Description de l'image" width="300" height="200">
+            <img src="BNP-Logo-2020-present.png" alt="Description de l'image" width="300" height="200">
             <span class="logo-text" style="color:black"></span>
         </div>
         <div class="header-actions">
@@ -1086,7 +1084,7 @@
                     }
 
                     body {
-                        font-family: 'Volvo Novum', 'Inter', sans-serif;
+                        font-family: 'BNP Novum', 'Inter', sans-serif;
                     }
 
                     :root {
@@ -1576,7 +1574,7 @@
                             d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01">
                         </path>
                     </svg>
-                    Volvo Design System
+                    BNP Design System
                 </div>
 
                 <div class="property-row">
@@ -1584,7 +1582,7 @@
                     <div class="design-tokens" id="colorTokens">
                         <div class="design-token" onclick="applyColorToken('primary', '#003057')">
                             <div class="token-preview" style="background-color: #003057"></div>
-                            <div class="token-name">Volvo Blue</div>
+                            <div class="token-name">BNP Blue</div>
                         </div>
                         <div class="design-token" onclick="applyColorToken('secondary', '#1c6bba')">
                             <div class="token-preview" style="background-color: #1c6bba"></div>
@@ -1592,11 +1590,11 @@
                         </div>
                         <div class="design-token" onclick="applyColorToken('accent', '#e60013')">
                             <div class="token-preview" style="background-color: #e60013"></div>
-                            <div class="token-name">Volvo Red</div>
+                            <div class="token-name">BNP Red</div>
                         </div>
                         <div class="design-token" onclick="applyColorToken('neutral', '#7c7c7c')">
                             <div class="token-preview" style="background-color: #7c7c7c"></div>
-                            <div class="token-name">Volvo Gray</div>
+                            <div class="token-name">BNP Gray</div>
                         </div>
                     </div>
                 </div>
@@ -1604,12 +1602,12 @@
                 <div class="property-row">
                     <div class="property-label">Recommended Themes</div>
                     <div class="theme-selector">
-                        <div class="theme-item" onclick="applyTheme('volvo')" style="border-color: #003057;">
+                        <div class="theme-item" onclick="applyTheme('BNP')" style="border-color: #003057;">
                             <div class="theme-preview">
                                 <div style="background: #003057"></div>
                                 <div style="background: #e60013"></div>
                             </div>
-                            <div class="theme-name">Volvo Corporate</div>
+                            <div class="theme-name">BNP Corporate</div>
                         </div>
                         <div class="theme-item" onclick="applyTheme('logistics')">
                             <div class="theme-preview">
@@ -1778,7 +1776,7 @@
                     <div class="property-row">
                         <div class="property-label">Main Font</div>
                         <div class="font-selector">
-                            <div class="font-option active" onclick="applyFont('Volvo Novum')">Volvo Novum</div>
+                            <div class="font-option active" onclick="applyFont('BNP Novum')">BNP Novum</div>
                             <div class="font-option" onclick="applyFont('Inter')">Inter</div>
                             <div class="font-option" onclick="applyFont('Arial')">Arial</div>
                         </div>
@@ -1868,7 +1866,7 @@
                     </div>
                     <div class="property-row">
                         <div class="property-label">Variable Prefix</div>
-                        <input type="text" class="property-input" value="volvokpi_"
+                        <input type="text" class="property-input" value="BNPkpi_"
                             onchange="updatePowerBIPrefix(this.value)">
                     </div>
                     <div class="property-row">
@@ -1887,7 +1885,7 @@
                                     style="width: 16px; height: 16px; margin-right: 8px;"
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_label" style="flex: 1; cursor: pointer;">label</label>
-                                <input type="text" class="property-input" style="width: 140px;" value="volvokpi_label"
+                                <input type="text" class="property-input" style="width: 140px;" value="BNPkpi_label"
                                     onchange="updatePowerBIVarName('label', this.value)">
                             </div>
 
@@ -1897,7 +1895,7 @@
                                     style="width: 16px; height: 16px; margin-right: 8px;"
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_value" style="flex: 1; cursor: pointer;">value</label>
-                                <input type="text" class="property-input" style="width: 140px;" value="volvokpi_value"
+                                <input type="text" class="property-input" style="width: 140px;" value="BNPkpi_value"
                                     onchange="updatePowerBIVarName('value', this.value)">
                             </div>
 
@@ -1908,7 +1906,7 @@
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_trendValue" style="flex: 1; cursor: pointer;">trendValue</label>
                                 <input type="text" class="property-input" style="width: 140px;"
-                                    value="volvokpi_trendValue"
+                                    value="BNPkpi_trendValue"
                                     onchange="updatePowerBIVarName('trendValue', this.value)">
                             </div>
 
@@ -1919,7 +1917,7 @@
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_trendIcon" style="flex: 1; cursor: pointer;">trendIcon</label>
                                 <input type="text" class="property-input" style="width: 140px;"
-                                    value="volvokpi_trendIcon" onchange="updatePowerBIVarName('trendIcon', this.value)">
+                                    value="BNPkpi_trendIcon" onchange="updatePowerBIVarName('trendIcon', this.value)">
                             </div>
 
                             <div class="powerbi-var-item"
@@ -1928,7 +1926,7 @@
                                     style="width: 16px; height: 16px; margin-right: 8px;"
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_subText" style="flex: 1; cursor: pointer;">subText</label>
-                                <input type="text" class="property-input" style="width: 140px;" value="volvokpi_subText"
+                                <input type="text" class="property-input" style="width: 140px;" value="BNPkpi_subText"
                                     onchange="updatePowerBIVarName('subText', this.value)">
                             </div>
 
@@ -1939,7 +1937,7 @@
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_borderColor" style="flex: 1; cursor: pointer;">borderColor</label>
                                 <input type="text" class="property-input" style="width: 140px;"
-                                    value="volvokpi_borderColor"
+                                    value="BNPkpi_borderColor"
                                     onchange="updatePowerBIVarName('borderColor', this.value)">
                             </div>
 
@@ -1950,7 +1948,7 @@
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_labelColor" style="flex: 1; cursor: pointer;">labelColor</label>
                                 <input type="text" class="property-input" style="width: 140px;"
-                                    value="volvokpi_labelColor"
+                                    value="BNPkpi_labelColor"
                                     onchange="updatePowerBIVarName('labelColor', this.value)">
                             </div>
 
@@ -1961,7 +1959,7 @@
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_valueColor" style="flex: 1; cursor: pointer;">valueColor</label>
                                 <input type="text" class="property-input" style="width: 140px;"
-                                    value="volvokpi_valueColor"
+                                    value="BNPkpi_valueColor"
                                     onchange="updatePowerBIVarName('valueColor', this.value)">
                             </div>
 
@@ -1972,7 +1970,7 @@
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_trendColor" style="flex: 1; cursor: pointer;">trendColor</label>
                                 <input type="text" class="property-input" style="width: 140px;"
-                                    value="volvokpi_trendColor"
+                                    value="BNPkpi_trendColor"
                                     onchange="updatePowerBIVarName('trendColor', this.value)">
                             </div>
 
@@ -1983,7 +1981,7 @@
                                     onchange="updatePowerBIVars(this)">
                                 <label for="pbi_subTextColor" style="flex: 1; cursor: pointer;">subTextColor</label>
                                 <input type="text" class="property-input" style="width: 140px;"
-                                    value="volvokpi_subTextColor"
+                                    value="BNPkpi_subTextColor"
                                     onchange="updatePowerBIVarName('subTextColor', this.value)">
                             </div>
 
@@ -2122,7 +2120,7 @@
             <div class="code-block" style="position: relative;">
                 <button class="copy-btn" onclick="copyCode()">Copy</button>
                 <code id="generatedCode">
-&lt;!-- Volvo Group KPI Designer - Unique Visitors --&gt;
+&lt;!-- BNP KPI Designer - Unique Visitors --&gt;
 &lt;style&gt;
 * {
     margin: 0;
@@ -2130,7 +2128,7 @@
     box-sizing: border-box;
 }
 body {
-    font-family: 'Volvo Novum', sans-serif;
+    font-family: 'BNP Novum', sans-serif;
 }
 
                 .card {
@@ -2741,7 +2739,7 @@ body {
                     iconPath: 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'
                 }
             },
-            // New Volvo Group specific KPIs
+            // New BNP specific KPIs
             {
                 id: 'fleet-efficiency',
                 name: 'Fleet Efficiency',
@@ -2904,7 +2902,7 @@ body {
         let previewMode = 'mobile';
         let powerBIMode = false;
         let powerBIVars = new Set();
-        let powerBIPrefix = 'volvokpi_';
+        let powerBIPrefix = 'BNPkpi_';
         let powerBIVarNames = new Map();
 
         // Initialize
@@ -3012,7 +3010,7 @@ body {
                 <div class="property-row">
                     <div class="property-label">Main Font</div>
                     <div class="font-selector">
-                        <div class="font-option active" onclick="applyFont('Volvo Novum')">Volvo Novum</div>
+                        <div class="font-option active" onclick="applyFont('BNP Novum')">BNP Novum</div>
                         <div class="font-option" onclick="applyFont('Inter')">Inter</div>
                         <div class="font-option" onclick="applyFont('Arial')">Arial</div>
                     </div>
@@ -3257,7 +3255,7 @@ body {
             const baseStyles = `
                 <style>
                     * { margin: 0; padding: 0; box-sizing: border-box; }
-                    body { font-family: 'Volvo Novum', 'Inter', sans-serif; }
+                    body { font-family: 'BNP Novum', 'Inter', sans-serif; }
                     :root {
                         --card-border-radius: 0.75rem;
                         --card-animation-duration: 0.2s;
@@ -3477,7 +3475,7 @@ body {
 
             // Format code
             const formattedCode = `
-<!-- Volvo Group KPI Designer - ${currentCard.name} -->
+<!-- BNP KPI Designer - ${currentCard.name} -->
 <style>
 * {
     margin: 0;
@@ -3485,7 +3483,7 @@ body {
     box-sizing: border-box;
 }
 body {
-    font-family: 'Volvo Novum', sans-serif;
+    font-family: 'BNP Novum', sans-serif;
 }
 ${styles}
 </style>
@@ -3536,7 +3534,7 @@ ${html.trim()}`;
                 btn.style.background = 'var(--success-green)';
                 setTimeout(() => {
                     btn.textContent = 'Copy';
-                    btn.style.background = 'var(--volvo-blue)';
+                    btn.style.background = 'var(--BNP-blue)';
                 }, 2000);
             });
         }
@@ -3578,7 +3576,7 @@ ${html.trim()}`;
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `volvo-kpi-${currentCard.id}-config.json`;
+            a.download = `BNP-kpi-${currentCard.id}-config.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -3659,8 +3657,8 @@ ${html.trim()}`;
         // Apply theme
         function applyTheme(themeName) {
             switch (themeName) {
-                case 'volvo':
-                    // Volvo Corporate Theme
+                case 'BNP':
+                    // BNP Corporate Theme
                     updateProperty('borderColor', '#003057');
 
                     if (currentProperties.hasOwnProperty('bgColor')) {
@@ -3860,10 +3858,10 @@ ${html.trim()}`;
 
             // Wrap the content with the container
             exportContent = `
-<!-- Volvo Group KPI Designer - ${currentCard.name} -->
+<!-- BNP KPI Designer - ${currentCard.name} -->
 <link rel='preconnect' href='https://fonts.googleapis.com'>
 <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
-<link href='https://fonts.googleapis.com/css2?family=Volvo+Novum:wght@300;400;500;600;700&display=swap' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css2?family=BNP+Novum:wght@300;400;500;600;700&display=swap' rel='stylesheet'>
 <style>
 * {
     margin: 0;
@@ -3871,7 +3869,7 @@ ${html.trim()}`;
     box-sizing: border-box;
 }
 body {
-    font-family: 'Volvo Novum', sans-serif;
+    font-family: 'BNP Novum', sans-serif;
 }
 :root {
     ${animationStyles}
@@ -3989,3 +3987,4 @@ ${containerEnd}`.trim();
 </body>
 
 </html>
+
